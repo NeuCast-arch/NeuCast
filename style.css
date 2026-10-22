@@ -1,0 +1,266 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --navy: #0a2350;
+    --navy-2: #0f3a7d;
+    --blue: #1d5fd0;
+    --text: #0f2447;
+    --muted: #5b6b86;
+}
+
+body { font-family: "Segoe UI", Arial, sans-serif; background: #f3f7fd; color: var(--text); }
+a { text-decoration: none; }
+button { font-family: inherit; }
+
+/* Category colors */
+.c-academic { --c: #2563eb; --tint: #f1f6ff; --line: #bcd3fb; }
+.c-events   { --c: #7c3aed; --tint: #f6f2ff; --line: #d5c4fb; }
+.c-urgent   { --c: #dc2626; --tint: #fff3f3; --line: #f6bcbc; }
+.c-general  { --c: #16a34a; --tint: #f1faf4; --line: #b7e2c4; }
+
+.badge {
+    display: inline-block; padding: 3px 10px;
+    border: 1px solid var(--line, #d3e2f8); border-radius: 6px;
+    background: var(--tint, #fff); color: var(--c, var(--blue));
+    font-size: 12px; font-weight: 700;
+}
+.audience-tag, .pin-tag {
+    display: inline-block; margin-left: 6px; padding: 3px 10px;
+    border-radius: 6px; font-size: 12px; font-weight: 700;
+}
+.audience-tag { background: #e8f0fd; color: var(--navy); }
+.pin-tag { background: #fef3c7; color: #92400e; }
+
+/* Header (colors come from the settings in data.js) */
+.header {
+    display: flex; justify-content: space-between; align-items: center;
+    height: 72px; padding: 0 28px; color: #fff;
+    background: linear-gradient(90deg, var(--navy), var(--navy-2));
+}
+.logo { font-size: 19px; font-weight: 800; letter-spacing: 1px; }
+.header-icons { display: flex; align-items: center; gap: 16px; }
+.header-icons a { color: #fff; font-size: 20px; }
+.logout-btn {
+    min-height: 40px; padding: 8px 16px;
+    border: 1px solid #fff; border-radius: 8px;
+    background: none; color: #fff; font-size: 14px; cursor: pointer;
+}
+.logout-btn:hover { background: rgba(255, 255, 255, .15); }
+
+/* Dashboard */
+.container { max-width: 2400px; margin: 0 auto; padding: 28px clamp(16px, 3vw, 56px) 40px; }
+.dashboard-title { margin-bottom: 20px; font-size: 28px; color: var(--navy); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+.stat-box {
+    flex: 1 1 80px; display: flex; flex-direction: column; align-items: center;
+    padding: 16px 8px; border: 1px solid #d3e2f8; border-radius: 12px; background: #fff;
+}
+.stat-number { font-size: 28px; font-weight: 800; color: var(--blue); }
+.stat-label { font-size: 13px; color: var(--muted); }
+
+.dashboard-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.dashboard-actions h2 { padding-left: 10px; border-left: 4px solid var(--blue); font-size: 21px; }
+
+.new-btn {
+    min-height: 40px; padding: 10px 18px; border: none; border-radius: 8px;
+    background: var(--blue); color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.login-btn {
+    width: 100%; min-height: 44px; padding: 12px; border: none; border-radius: 8px;
+    background: var(--blue); color: #fff; font-size: 16px; font-weight: 700; cursor: pointer;
+}
+.new-btn:hover, .login-btn:hover { filter: brightness(.9); }
+
+/* Announcement and student rows */
+.admin-item, .student-item {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    margin-bottom: 12px; padding: 16px; border-radius: 12px;
+    border: 1px solid var(--line, #d3e2f8); background: var(--tint, #fff);
+}
+.admin-item h3 { margin: 8px 0 4px; font-size: 16px; }
+.admin-date { font-size: 13px; color: var(--muted); }
+.admin-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.student-item h3 { margin-bottom: 4px; font-size: 16px; }
+.student-meta { font-size: 13px; line-height: 1.6; color: var(--muted); }
+
+.edit-btn, .delete-btn {
+    min-height: 40px; padding: 8px 16px; border-radius: 8px;
+    background: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.edit-btn { border: 1.5px solid var(--blue); color: var(--blue); }
+.edit-btn:hover { background: var(--blue); color: #fff; }
+.delete-btn { border: 1.5px solid #dc2626; color: #dc2626; }
+.delete-btn:hover { background: #dc2626; color: #fff; }
+
+.no-results { padding: 24px; text-align: center; color: var(--muted); }
+
+/* Tabs */
+.tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid #d3e2f8; }
+.tab-btn {
+    margin-bottom: -2px; padding: 12px 18px;
+    border: none; border-bottom: 3px solid transparent;
+    background: none; color: var(--muted); font-size: 15px; font-weight: 700; cursor: pointer;
+}
+.tab-btn:hover { color: var(--blue); }
+.tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+.tab-panel[hidden] { display: none; }
+
+/* Students tab */
+.course-counts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.course-chip { padding: 6px 12px; border: 1px solid #d3e2f8; border-radius: 20px; background: #fff; font-size: 13px; }
+.course-chip strong { color: var(--blue); }
+.student-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+.student-filters select, .student-filters input {
+    padding: 10px 12px; border: 1px solid #c8d6ee; border-radius: 8px;
+    background: #fff; font-family: inherit; font-size: 15px;
+}
+.student-filters input { flex: 1; min-width: 180px; }
+
+/* Pop-up form */
+.modal {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; justify-content: center; align-items: center;
+    padding: 20px; background: rgba(10, 35, 80, .55);
+}
+.modal[hidden] { display: none; }
+.modal-content {
+    position: relative; width: 100%; max-width: 500px; max-height: 90vh;
+    overflow-y: auto; padding: 28px 24px; border-radius: 16px; background: #fff;
+}
+.modal-content h2 { margin-bottom: 18px; font-size: 22px; color: var(--navy); }
+.close-btn { position: absolute; top: 14px; right: 14px; border: none; background: none; color: var(--muted); font-size: 20px; cursor: pointer; }
+
+/* Forms (admin pop-up and login, register, profile pages) */
+.announcement-form label, .login-box label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 700; }
+.announcement-form input, .announcement-form select, .announcement-form textarea,
+.login-box input, .login-box select {
+    width: 100%; margin-bottom: 16px; padding: 12px;
+    border: 1px solid #c8d6ee; border-radius: 8px; font-family: inherit; font-size: 16px;
+}
+.login-box select { background: #fff; }
+.announcement-form textarea { resize: vertical; }
+.announcement-form input:focus, .announcement-form select:focus, .announcement-form textarea:focus,
+.login-box input:focus, .login-box select:focus { outline: none; border-color: var(--blue); }
+
+.announcement-form .pin-option { display: flex; align-items: center; margin-bottom: 16px; font-weight: 600; cursor: pointer; }
+.announcement-form .pin-option input { width: auto; margin: 0 8px 0 0; }
+
+.login-message { margin-bottom: 16px; font-size: 14px; }
+.login-message.error { color: #dc2626; }
+.login-message.success { color: #16a34a; }
+
+/* Login, register and profile pages */
+.login-page {
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; padding: 20px;
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+}
+.login-box { width: 100%; max-width: 400px; padding: 32px 28px; border-radius: 16px; background: #fff; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); }
+.login-logo { margin-bottom: 20px; color: var(--navy); }
+.login-uni { margin: -14px 0 18px; font-size: 13px; color: var(--muted); }
+.login-box h1 { margin-bottom: 4px; font-size: 26px; color: var(--navy); }
+.login-subtitle { margin-bottom: 24px; color: var(--muted); }
+.back-link { display: block; margin-top: 20px; text-align: center; color: var(--blue); font-size: 14px; }
+
+.profile-box { max-width: 460px; }
+.profile-box h2 { margin: 28px 0 14px; padding-top: 24px; border-top: 1px solid #e1e8f5; font-size: 18px; color: var(--navy); }
+.profile-box input[readonly] { background: #f3f7fd; color: var(--muted); cursor: not-allowed; }
+.field-note { margin: -10px 0 16px; font-size: 12px; color: var(--muted); }
+.logout-link {
+    display: block; width: 100%; min-height: 44px; margin-top: 12px; padding: 12px;
+    border: 1.5px solid #dc2626; border-radius: 8px;
+    background: #fff; color: #dc2626; font-size: 15px; font-weight: 700; cursor: pointer;
+}
+.logout-link:hover { background: #dc2626; color: #fff; }
+
+/* Phones */
+@media (max-width: 560px) {
+    .header { padding: 0 16px; }
+    .logo { font-size: 15px; letter-spacing: 0; }
+    .container { padding: 20px 16px 32px; }
+    .stats { gap: 8px; }
+    .stat-number { font-size: 24px; }
+    .dashboard-actions { flex-wrap: wrap; gap: 10px; }
+    .admin-item, .student-item { flex-direction: column; align-items: flex-start; }
+    .admin-actions { width: 100%; }
+    .edit-btn, .delete-btn { flex: 1; }
+    .student-item .delete-btn { width: 100%; }
+    .tab-btn { flex: 1; padding: 12px 8px; }
+    .modal { padding: 12px; }
+    .modal-content { padding: 24px 18px; }
+    .login-box { padding: 24px 20px; }
+}
+
+/* Icons */
+.icon {
+    width: 1.15em; height: 1.15em; margin-right: 4px; vertical-align: -0.2em; flex-shrink: 0;
+    fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.close-btn .icon, .header-icons .icon { margin-right: 0; }
+.close-btn .icon { width: 20px; height: 20px; }
+.header-icons a .icon { width: 24px; height: 24px; }
+.logo .icon { width: 22px; height: 22px; margin-right: 8px; vertical-align: -4px; }
+.tab-btn .icon { margin-right: 8px; }
+
+/* Category shapes in the admin badges */
+.shape { display: inline-block; background: var(--c); }
+.shape.xs { width: 14px; height: 14px; margin-right: 6px; vertical-align: -2px; }
+.shape.circle { border-radius: 50%; }
+.shape.square { border-radius: 3px; }
+.shape.triangle { clip-path: polygon(50% 5%, 100% 95%, 0 95%); }
+.shape.hexagon { clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0 50%); }
+
+/* Questions tab */
+.tab-badge {
+    display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 10px;
+    background: #ef4444; color: #fff; font-size: 11px; font-weight: 700;
+}
+.tab-badge[hidden] { display: none; }
+
+.question-item { margin-bottom: 14px; padding: 16px; border: 1px solid #d3e2f8; border-radius: 12px; background: #fff; }
+.q-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.q-date { margin-left: auto; font-size: 12px; color: var(--muted); }
+.q-status { padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+.q-status.pending { background: #fef3c7; color: #92400e; }
+.q-status.answered { background: #dcfce7; color: #166534; }
+.q-from { margin-bottom: 4px; font-size: 14px; }
+.q-about { margin-bottom: 6px; font-size: 13px; color: var(--muted); }
+.q-text { font-size: 15px; line-height: 1.5; }
+
+.reply-box {
+    width: 100%; margin: 12px 0 10px; padding: 10px;
+    border: 1px solid #c8d6ee; border-radius: 8px;
+    font-family: inherit; font-size: 15px; resize: vertical;
+}
+.reply-box:focus { outline: none; border-color: var(--blue); }
+
+.q-actions { display: flex; gap: 8px; }
+.reply-btn {
+    min-height: 40px; padding: 8px 16px; border: none; border-radius: 8px;
+    background: var(--blue); color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.reply-btn:hover { filter: brightness(.9); }
+
+@media (max-width: 560px) {
+    .q-actions button { flex: 1; }
+}
+
+/* ---------- Wide screens (admin dashboard): use the full width ---------- */
+@media (min-width: 900px) {
+    /* auto-fit rather than a fixed 4: the dashboard now has a fifth stat box
+       (awaiting confirmation) and it should not wrap onto a row of its own */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .admin-list, #studentList, #questionList {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr));
+        gap: 16px 24px; align-items: start;
+    }
+    .admin-list .admin-item, #studentList .student-item, #questionList .question-item { margin-bottom: 0; }
+}
+
+/* Three admin tabs must fit on a phone */
+@media (max-width: 560px) {
+    .tabs { gap: 6px; }
+    .tabs .tab-btn { min-width: 0; padding: 10px 4px; font-size: 12px; }
+    .tabs .tab-btn .icon { margin-right: 4px; width: 16px; height: 16px; }
+}

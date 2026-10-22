@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - NeuCast</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body class="admin-page">
+
+    <header class="admin-top">
+        <a class="admin-brand" href="admin.html" aria-label="NeuCast admin">
+            <span class="admin-brand__mark" data-icon="neucast"></span>
+            <span class="admin-brand__name">NEU<em>CAST</em> <small>Admin</small></span>
+        </a>
+        <div class="admin-top__right">
+            <a href="index.html" class="nb-btn nb-btn--sm"><span data-icon="home"></span> Homepage</a>
+            <button id="logoutBtn" class="nb-btn nb-btn--sm nb-btn--ink">Log out</button>
+        </div>
+    </header>
+
+    <main id="dashboard" class="admin-main" hidden>
+
+        <h1 class="admin-title">Dashboard</h1>
+
+        <section class="stats" aria-label="Totals">
+            <div class="stat-box c-events"><span class="shape square sm" aria-hidden="true"></span><span id="totalCount" class="stat-number">0</span><span class="stat-label">Announcements</span></div>
+            <div class="stat-box c-urgent"><span class="shape triangle sm" aria-hidden="true"></span><span id="urgentCount" class="stat-number">0</span><span class="stat-label">Urgent</span></div>
+            <div class="stat-box c-academic"><span class="shape circle sm" aria-hidden="true"></span><span id="academicCount" class="stat-number">0</span><span class="stat-label">Academic</span></div>
+            <div class="stat-box c-general"><span class="shape hexagon sm" aria-hidden="true"></span><span id="studentCount" class="stat-number">0</span><span class="stat-label">Students</span></div>
+        </section>
+
+        <section class="shape-chart nb-panel" aria-labelledby="chartTitle">
+            <div class="nb-panel__head"><h2 id="chartTitle" class="chart-title">Announcements by category</h2></div>
+            <div class="nb-panel__body">
+                <p class="chart-note">Each shape's <strong>area</strong> equals its number of announcements (1 announcement = 1 unit²).</p>
+                <div id="shapeChart" class="shape-chart-grid"></div>
+            </div>
+        </section>
+
+        <div class="tabs" role="tablist" aria-label="Dashboard sections">
+            <button class="tab-btn active" role="tab" data-tab="announcementsTab"><span data-icon="megaphone"></span> Announcements</button>
+            <button class="tab-btn" role="tab" data-tab="studentsTab"><span data-icon="cap"></span> Students <span id="pendingBadge" class="tab-badge" hidden>0</span></button>
+            <button class="tab-btn" role="tab" data-tab="questionsTab"><span data-icon="help"></span> Questions <span id="questionBadge" class="tab-badge" hidden>0</span></button>
+        </div>
+
+        <section id="announcementsTab" class="tab-panel">
+            <div class="dashboard-actions">
+                <h2>Announcements</h2>
+                <button id="newBtn" class="nb-btn nb-btn--accent">+ New announcement</button>
+            </div>
+            <div id="adminList" class="admin-list"></div>
+            <p id="emptyMessage" class="no-results" hidden>No announcements yet. Post the first one with the button above.</p>
+        </section>
+
+        <section id="studentsTab" class="tab-panel" hidden>
+            <div id="pendingSection" hidden>
+                <div class="dashboard-actions"><h2>Waiting for approval</h2></div>
+                <div id="pendingList"></div>
+            </div>
+            <div class="dashboard-actions"><h2>Registered students</h2></div>
+            <div id="courseCounts" class="course-counts"></div>
+            <div class="student-filters">
+                <select id="studentCourseFilter" class="nb-input" aria-label="Filter by course">
+                    <option value="">All courses</option>
+                </select>
+                <input type="text" id="studentSearch" class="nb-input" placeholder="Search by name, ID, or email" aria-label="Search students">
+            </div>
+            <div id="studentList"></div>
+            <p id="noStudents" class="no-results" hidden>No students have registered yet.</p>
+        </section>
+
+        <section id="questionsTab" class="tab-panel" hidden>
+            <div class="dashboard-actions"><h2>Student questions</h2></div>
+            <div class="student-filters">
+                <select id="questionFilter" class="nb-input" aria-label="Filter questions">
+                    <option value="all">All questions</option>
+                    <option value="pending">Unanswered</option>
+                    <option value="answered">Answered</option>
+                </select>
+            </div>
+            <div id="questionList"></div>
+            <p id="noQuestions" class="no-results" hidden>No questions yet.</p>
+        </section>
+
+        <div id="formModal" class="modal nb-modal" hidden>
+            <div class="modal-content nb-modal__content" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+                <button id="closeForm" class="close-btn" data-icon="close" aria-label="Close"></button>
+                <h2 id="formTitle">New announcement</h2>
+
+                <form id="announcementForm" class="announcement-form">
+                    <div class="field">
+                        <label for="titleInput">Title</label>
+                        <input type="text" id="titleInput" class="nb-input" placeholder="e.g. Library closed on Friday">
+                    </div>
+                    <div class="field">
+                        <label for="categoryInput">Category</label>
+                        <select id="categoryInput" class="nb-input">
+                            <option value="urgent">Urgent</option>
+                            <option value="academic">Academic</option>
+                            <option value="events">Events</option>
+                            <option value="general">General</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="audienceInput">Send to</label>
+                        <select id="audienceInput" class="nb-input">
+                            <option value="all">All students (university-wide)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="detailsInput">Details</label>
+                        <textarea id="detailsInput" class="nb-input" rows="5" placeholder="Write the full announcement"></textarea>
+                    </div>
+                    <div class="field">
+                        <label for="expiresInput">Expires on (optional)</label>
+                        <input type="date" id="expiresInput" class="nb-input">
+                    </div>
+
+                    <label class="check-option"><input type="checkbox" id="pinInput"> <span><span data-icon="pin"></span> Pin to top of the homepage</span></label>
+                    <label class="check-option"><input type="checkbox" id="ackInput"> <span><span data-icon="shield"></span> Ask students to confirm they've read it</span></label>
+
+                    <p id="formMessage" class="login-message error" role="alert" hidden></p>
+
+                    <button type="submit" id="submitBtn" class="nb-btn nb-btn--accent nb-btn--block">Post announcement</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="icons.js"></script>
+    <script src="data.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

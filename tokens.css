@@ -1,0 +1,98 @@
+/* =====================================================
+   NEUCAST DESIGN TOKENS  (Playful Geometric)
+   The single source of truth. Every other stylesheet reads these.
+   To re-theme the site, change values in this file only.
+   ===================================================== */
+
+:root {
+    /* --- Palette: confetti colors on warm paper, slate for ink --- */
+    --canvas:  #FFFDF5;   /* page background: warm paper */
+    --surface: #FFFFFF;   /* cards, panels, pop-ups */
+    --ink:     #1E293B;   /* text, borders, shadows (flips in dark mode) */
+    --edge:    #1E293B;   /* borders and shadows on colored blocks (never flips) */
+    --text:    #1E293B;
+    --muted:   #64748B;   /* secondary text on white: 4.8:1 */
+    --white:   #FFFFFF;
+
+    --accent:    #7C3AED; /* primary actions. Darker than #8B5CF6 so white text passes AA (5.7:1) */
+    --accent-fg: #FFFFFF;
+    --pink:      #F472B6; /* secondary pop */
+    --yellow:    #FBBF24; /* amber: optimism, panel headers */
+    --mint:      #34D399; /* freshness, confirmations */
+    --violet:    #A78BFA; /* soft violet fill that takes dark text */
+    --urgent:    #FF6B6B; /* reserved for Urgent. Nothing else uses red */
+    --on-color:  #1E293B; /* text that sits on pink / yellow / mint / violet / urgent */
+
+    /* --- Category tokens: change a category's color in ONE place ---
+       --c = shape + header fill, --on-c = text on that fill */
+    --cat-academic-c: var(--accent);  --cat-academic-on: #FFFFFF;
+    --cat-events-c:   var(--pink);    --cat-events-on:   #1E293B;
+    --cat-urgent-c:   var(--urgent);  --cat-urgent-on:   #1E293B;
+    --cat-general-c:  var(--mint);    --cat-general-on:  #1E293B;
+
+    /* --- Borders & radius --- */
+    --bw: 4px;            /* chunky but not heavy */
+    --bw-thin: 2px;
+    --bw-thick: 6px;
+    --radius-sm: 8px;
+    --radius: 16px;
+    --radius-lg: 24px;
+    --radius-full: 9999px;
+
+    /* --- Hard shadows: zero blur, bottom-right --- */
+    --shadow-sm: 4px 4px 0 0 var(--ink);
+    --shadow-md: 6px 6px 0 0 var(--ink);
+    --shadow-lg: 8px 8px 0 0 var(--ink);
+    --shadow-xl: 12px 12px 0 0 var(--ink);
+    --shadow-lift: 8px 8px 0 0 var(--ink);
+
+    /* --- Typography --- */
+    --font-display: "Outfit", system-ui, sans-serif;
+    --font: "Plus Jakarta Sans", system-ui, sans-serif;
+    --fw-body: 500;
+    --fw-heading: 800;
+
+    /* --- Motion: springy. The overshoot is the personality --- */
+    --dur-fast: 150ms;
+    --dur: 300ms;
+    --ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* --- Layout --- */
+    --container: 2400px;
+    --gutter: clamp(16px, 3vw, 56px);
+    --tap: 48px;          /* minimum touch target */
+    --halftone: radial-gradient(var(--ink) 1.5px, transparent 1.5px);
+}
+
+/* Dark mode (existing site setting). Only the "ink" flips; colored blocks keep slate text. */
+body.dark {
+    --canvas:  #0F172A;
+    --surface: #1E293B;
+    --ink:     #F1F5F9;
+    --text:    #F1F5F9;
+    --muted:   #94A3B8;
+}
+
+/* Shadows shrink on phones, but never disappear */
+@media (max-width: 640px) {
+    :root {
+        --shadow-sm: 3px 3px 0 0 var(--ink);
+        --shadow-md: 4px 4px 0 0 var(--ink);
+        --shadow-lg: 6px 6px 0 0 var(--ink);
+        --shadow-xl: 8px 8px 0 0 var(--ink);
+        --shadow-lift: 6px 6px 0 0 var(--ink);
+        --gutter: 16px;
+    }
+}
+
+/* Category scopes: put c-<key> on any element to set --c / --on-c for its children */
+.c-academic { --c: var(--cat-academic-c); --on-c: var(--cat-academic-on); }
+.c-events   { --c: var(--cat-events-c);   --on-c: var(--cat-events-on); }
+.c-urgent   { --c: var(--cat-urgent-c);   --on-c: var(--cat-urgent-on); }
+.c-general  { --c: var(--cat-general-c);  --on-c: var(--cat-general-on); }
+
+/* Calculator-only shapes reuse the same palette */
+.k-rectangle     { --c: var(--yellow); --on-c: #1E293B; }
+.k-parallelogram { --c: var(--violet); --on-c: #1E293B; }
+.k-trapezoid     { --c: var(--accent); --on-c: #FFFFFF; }
+.k-pentagon      { --c: var(--white);  --on-c: #1E293B; }

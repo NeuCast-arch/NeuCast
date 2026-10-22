@@ -1,0 +1,114 @@
+/* =====================================================
+   NEUCAST BASE
+   Reset, typography, textures, focus, shapes, motion.
+   ===================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: var(--font);
+    font-weight: var(--fw-body);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--text);
+    background-color: var(--canvas);
+    /* graph-paper texture: backgrounds are never flat */
+    background-image:
+        linear-gradient(to right, rgba(0, 0, 0, .08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, .08) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+body.dark {
+    background-image:
+        linear-gradient(to right, rgba(255, 255, 255, .07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, .07) 1px, transparent 1px);
+}
+body.text-small { zoom: .92; }
+body.text-large { zoom: 1.12; }
+
+h1, h2, h3, h4 { margin: 0; font-weight: var(--fw-heading); line-height: 1.05; letter-spacing: -0.02em; text-transform: uppercase; }
+p { margin: 0; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+[hidden] { display: none !important; }
+::selection { background: var(--yellow); color: #000; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Focus: thick, visible, never a soft glow */
+:is(a, button, summary, [tabindex]):focus-visible {
+    outline: 4px solid var(--ink);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 7px var(--yellow);
+}
+
+/* Icons (drawn by icons.js) */
+.icon {
+    width: 1.15em; height: 1.15em; margin-right: 4px; vertical-align: -0.2em; flex-shrink: 0;
+    fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: square; stroke-linejoin: miter;
+}
+
+/* ---------- Shapes: strong ink outline + flat colored fill ----------
+   Every shape gets the SAME outline weight (--sh-out) and the same hard
+   offset shadow (--sh-pop), so circle, square, triangle and hexagon pop
+   equally.
+
+   Circle / square / rectangle: a real border.
+
+   Clip-path shapes (triangle, hexagon, ...) cannot take a border, and a
+   drop-shadow on the SAME element is cut away by its own clip-path (CSS
+   applies filter first, clip-path after). So the outline is built from two
+   stacked copies of the silhouette instead:
+     ::before  = the full silhouette in ink   (this is the outline)
+     ::after   = the same silhouette in the fill color, pulled in by the
+                 outline weight                (this is the colored face)
+   The element itself is never clipped, so the focus ring and the offset
+   shadow below still work. Colors: outline = --line, which falls back to
+   --ink (light in dark mode, for shapes sitting on dark surfaces). Shapes that
+   sit on a colored block use --edge instead (see the list below), so their
+   outline stays dark in dark mode too. face = --c.
+   Tune weight per context with --sh-out / --sh-pop. */
+.shape {
+    --clip: none;
+    --sh-out: 5px;                       /* outline weight */
+    --sh-pop: 3px;                       /* hard offset shadow */
+    --sh-edge: calc(var(--sh-out) * 1.45); /* slanted edges need more inset to look as thick */
+    position: relative; display: block; width: 44px; height: 44px; flex-shrink: 0;
+    background: var(--c, var(--yellow));
+    filter: drop-shadow(var(--sh-pop) var(--sh-pop) 0 var(--line, var(--ink)));
+}
+.shape.sm { width: 30px; height: 30px; --sh-out: 4px; --sh-pop: 2px; }
+.shape.xs { width: 16px; height: 16px; --sh-out: 2px; --sh-pop: 0px; }
+.shape.circle, .shape.square, .shape.rectangle { border: var(--sh-out) solid var(--line, var(--ink)); background: var(--c, var(--yellow)); }
+.shape.circle { border-radius: 50%; }
+.shape.triangle      { --clip: polygon(50% 0, 100% 100%, 0 100%); }
+.shape.hexagon       { --clip: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%); }
+.shape.parallelogram { --clip: polygon(20% 0, 100% 0, 80% 100%, 0 100%); }
+.shape.trapezoid     { --clip: polygon(20% 0, 80% 0, 100% 100%, 0 100%); }
+.shape.pentagon      { --clip: polygon(50% 0, 100% 38%, 81% 100%, 19% 100%, 0 38%); }
+.shape.triangle, .shape.hexagon, .shape.parallelogram, .shape.trapezoid, .shape.pentagon { background: none; }
+.shape.triangle::before, .shape.hexagon::before, .shape.parallelogram::before, .shape.trapezoid::before, .shape.pentagon::before,
+.shape.triangle::after,  .shape.hexagon::after,  .shape.parallelogram::after,  .shape.trapezoid::after,  .shape.pentagon::after {
+    content: ""; position: absolute; clip-path: var(--clip);
+}
+.shape.triangle::before, .shape.hexagon::before, .shape.parallelogram::before, .shape.trapezoid::before, .shape.pentagon::before {
+    inset: 0; background: var(--line, var(--ink));
+}
+.shape.triangle::after, .shape.hexagon::after, .shape.parallelogram::after, .shape.trapezoid::after, .shape.pentagon::after {
+    inset: var(--sh-edge); background: var(--c, var(--yellow));
+}
+/* A triangle's point needs a deeper inset at the top, or the tip looks thin */
+.shape.triangle::after { inset: calc(var(--sh-edge) * 2.1) var(--sh-edge) var(--sh-out); }
+
+/* Shapes sitting on a colored or always-white block keep a dark outline in dark mode */
+.prompt-shape .shape, .shape-row .shape, .cat-tile.active .shape, .sm-title .shape, .sm-item__shape .shape,
+.rec-item__shape .shape, .why .shape, .badge .shape, .card-top .shape, .geo-card .shape, .pcard .shape,
+.recovery__head > .shape, .nb-hex .shape { --line: var(--edge); }
+
+/* ---------- Motion ---------- */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

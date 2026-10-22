@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - NeuCast</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+
+<body class="auth-page">
+
+    <div class="marquee" aria-hidden="true">
+        <div class="marquee__track">
+            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
+            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
+            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
+            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
+        </div>
+    </div>
+
+    <div class="auth auth--register">
+
+        <!-- Decorative poster (hidden from screen readers) -->
+        <section class="auth-poster" aria-hidden="true">
+            <div class="deco deco-diamond"></div>
+            <div class="deco deco-ring"></div>
+
+            <p class="poster-title">
+                <span class="stroke-text">Get</span>Connected
+                <span class="sticker">with Your Course</span>
+            </p>
+            <div class="poster-row">
+                <p class="poster-copy">Get the latest announcements, events, and important updates, all in one place.</p>
+                <div class="poster-tag">Your campus.<br>Your information.<br>Your connection.</div>
+            </div>
+
+            <ul class="poster-grid">
+                <li class="pcard c-academic">
+                    <span class="pcard__shape"><span class="shape circle"></span></span>
+                    <span class="pcard__text"><strong>Academic</strong><span>Exams, Enrollment, Classes</span><em class="nb-badge">A = πr²</em></span>
+                </li>
+                <li class="pcard c-events">
+                    <span class="pcard__shape"><span class="shape square"></span></span>
+                    <span class="pcard__text"><strong>Events</strong><span>Activities, Seminars, Programs</span><em class="nb-badge">A = s²</em></span>
+                </li>
+                <li class="pcard c-urgent">
+                    <span class="pcard__shape"><span class="shape triangle"></span></span>
+                    <span class="pcard__text"><strong>Urgent</strong><span>Emergency, Suspension, Alerts</span><em class="nb-badge">A = ½ × b × h</em></span>
+                </li>
+                <li class="pcard c-general">
+                    <span class="pcard__shape"><span class="shape hexagon"></span></span>
+                    <span class="pcard__text"><strong>General</strong><span>Notices, Updates, Other</span><em class="nb-badge">A = (3√3 / 2) × s²</em></span>
+                </li>
+            </ul>
+        </section>
+
+        <main class="auth-main">
+            <div class="auth-card nb-panel">
+                <header class="auth-card__head nb-panel__head">
+                    <span class="auth-brand">
+                        <span class="auth-brand__mark" data-icon="neucast"></span>
+                        <span class="auth-brand__name">NEU<em>CAST</em></span>
+                    </span>
+                    <span class="nb-badge nb-badge--ink">New Era University</span>
+                </header>
+
+                <div class="auth-card__body">
+                    <h1>Create Account</h1>
+                    <p class="login-subtitle">Register to see announcements for you and your course</p>
+
+                    <form id="registerForm" class="auth-form">
+                        <div class="field field--wide">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" class="nb-input" placeholder="Juan Dela Cruz" autocomplete="name">
+                        </div>
+
+                        <div class="field">
+                            <label for="studentId">Student ID Number</label>
+                            <input type="text" id="studentId" class="nb-input" placeholder="e.g. 2026-00123" autocomplete="off">
+                        </div>
+
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" class="nb-input" placeholder="you@university.edu" autocomplete="email">
+                        </div>
+
+                        <div class="field">
+                            <label for="course">Course</label>
+                            <select id="course" class="nb-input">
+                                <option value="">Select your course...</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="year">Year Level</label>
+                            <select id="year" class="nb-input">
+                                <option value="">Select your year level...</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" class="nb-input" placeholder="At least 6 characters" autocomplete="new-password">
+                        </div>
+
+                        <div class="field">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" class="nb-input" placeholder="Type your password again" autocomplete="new-password">
+                        </div>
+
+                        <p id="registerMessage" class="login-message error" role="alert" hidden></p>
+
+                        <button type="submit" class="auth-submit nb-btn nb-btn--accent nb-btn--block">Create Account <span data-icon="arrowright"></span></button>
+                    </form>
+
+                    <div class="auth-or" aria-hidden="true">or</div>
+
+                    <a href="login.html" class="back-link nb-btn nb-btn--secondary nb-btn--block">Already have an account? Log in</a>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <script src="icons.js"></script>
+    <script src="data.js"></script>
+    <script src="register.js"></script>
+</body>
+</html>

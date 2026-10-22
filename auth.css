@@ -1,0 +1,213 @@
+/* =====================================================
+   NEUCAST AUTH PAGES  (login.html, register.html)
+   Page layout only. Colors, borders, shadows, buttons and inputs
+   come from tokens.css, base.css and components.css.
+   Load order: tokens.css, base.css, components.css, auth.css
+   ===================================================== */
+
+.auth-page { min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+
+/* ---------- Marquee ticker (same as the homepage) ---------- */
+.marquee { overflow: hidden; background: var(--edge); color: var(--yellow); border-bottom: var(--bw) solid var(--edge); }
+.marquee__track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
+.marquee__track span { padding: 8px 28px; font-size: 13px; font-weight: var(--fw-heading); letter-spacing: .02em; white-space: nowrap; }
+.marquee__track span::after { content: "★"; margin-left: 28px; color: var(--pink); }
+
+/* ---------- Page split: poster (left) / form (right). Asymmetric on purpose ---------- */
+.auth {
+    flex: 1; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    --poster: var(--violet); --sticker: var(--yellow);
+}
+.auth--register { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); --poster: var(--yellow); --sticker: var(--pink); }
+
+/* ---------- Poster ---------- */
+.auth-poster {
+    position: relative; overflow: hidden; container-type: inline-size;
+    display: flex; flex-direction: column; justify-content: center; gap: clamp(20px, 3vw, 40px);
+    padding: clamp(32px, 5vw, 96px);
+    background-color: var(--poster); background-image: var(--halftone); background-size: 26px 26px;
+    border-right: var(--bw-thick) solid var(--edge); color: var(--edge);
+}
+.auth-poster > * { position: relative; z-index: 1; }
+
+.poster-title {
+    font-weight: var(--fw-heading); line-height: .88; letter-spacing: -.04em;
+    font-size: clamp(44px, 7vw, 110px);
+    font-size: clamp(44px, min(14cqw, 15vh), 150px);
+}
+.poster-title .stroke-text { display: block; }
+.poster-title .sticker {
+    display: inline-block; margin-top: 14px; padding: 6px 16px;
+    font-size: .5em; line-height: 1; letter-spacing: -.02em;
+    background: var(--sticker); transform: rotate(-2deg);
+}
+.poster-copy {
+    max-width: 30em; padding: 10px 14px; background: var(--canvas); color: var(--edge);
+    border: var(--bw) solid var(--edge); box-shadow: var(--shadow-sm); font-size: 18px;
+}
+
+/* Intro line + tagline share one row */
+.poster-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px 28px; flex-wrap: wrap; }
+.poster-copy { flex: 1 1 220px; max-width: 34em; }
+.poster-tag {
+    flex: 0 0 auto; padding: 10px 16px; transform: rotate(2deg);
+    background: var(--edge); color: var(--yellow); border: var(--bw) solid var(--edge); box-shadow: var(--shadow-sm);
+    font-size: 13px; font-weight: var(--fw-heading); letter-spacing: .02em; text-align: right; line-height: 1.5;
+}
+
+/* Category cards: stretch to fill whatever height is left, so the poster never has a blank band.
+   Text comes from the same CATEGORIES used on the homepage. */
+.poster-grid {
+    flex: 1 1 auto; min-height: 260px; margin: 0; padding: 0; list-style: none;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: clamp(16px, 1.8vw, 28px);
+}
+.pcard {
+    display: grid; grid-template-columns: clamp(72px, 30%, 130px) minmax(0, 1fr); min-height: 0;
+    background: var(--white); color: var(--edge); border: var(--bw) solid var(--edge); box-shadow: var(--shadow-md);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.pcard:nth-child(odd) { transform: rotate(-.6deg); }
+.pcard:nth-child(even) { transform: rotate(.6deg); }
+.pcard:hover { transform: translate(-3px, -5px) rotate(0); box-shadow: var(--shadow-lift); }
+.pcard__shape { display: grid; place-items: center; padding: 12px; background: var(--c); border-right: var(--bw) solid var(--edge); }
+.pcard .shape { --c: #fff; width: clamp(52px, 80%, 104px); height: auto; aspect-ratio: 1; transition: transform var(--dur) var(--ease); }
+.pcard:hover .shape { transform: rotate(-10deg) scale(1.1); }
+.pcard__text { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 6px; padding: 14px 16px; min-width: 0; }
+.pcard__text strong { font-size: clamp(16px, 3.6cqw, 28px); line-height: 1; letter-spacing: -.02em; max-width: 100%; }
+.pcard__text > span { font-size: 14px; line-height: 1.3; }
+.pcard .nb-badge { margin-top: 4px; padding: 2px 8px; font-size: 11px; letter-spacing: .02em; font-style: normal; text-transform: none; letter-spacing: .02em; white-space: normal; }
+
+.deco { position: absolute !important; z-index: 0 !important; pointer-events: none; }
+.deco-diamond { top: 6%; right: 7%; width: 56px; height: 56px; background: var(--pink); border: var(--bw) solid var(--edge); animation: spin-slow 10s linear infinite; }
+.deco-ring { top: 17%; right: 4%; width: 64px; height: 64px; border: var(--bw-thick) solid var(--edge); border-radius: 50%; }
+
+/* ---------- Form side ---------- */
+.auth-main {
+    position: relative; overflow: hidden; display: grid; place-items: center;
+    padding: clamp(28px, 4vw, 72px) var(--gutter);
+}
+.auth-main::before {
+    content: ""; position: absolute; z-index: 0; left: 5%; top: 8%; width: 110px; height: 110px;
+    background: var(--pink); border: var(--bw) solid var(--edge); border-radius: 50%;
+}
+.auth-main::after {
+    content: ""; position: absolute; z-index: 0; right: 6%; bottom: 7%; width: 140px; height: 130px;
+    background: var(--edge); clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.auth-card { position: relative; z-index: 1; width: 100%; max-width: 560px; box-shadow: var(--shadow-lg); }
+.auth--register .auth-card { max-width: 720px; }
+
+.auth-card__head { padding: 14px 18px; }
+.auth-brand { display: inline-flex; align-items: center; gap: 12px; }
+.auth-brand__mark {
+    display: grid; place-items: center; width: 48px; height: 48px;
+    border: var(--bw) solid var(--edge); background: var(--pink); box-shadow: 4px 4px 0 0 var(--edge); transform: rotate(-4deg);
+}
+.auth-brand__mark .icon { width: 26px; height: 26px; margin: 0; }
+.auth-brand__name { font-size: 24px; font-weight: var(--fw-heading); letter-spacing: -.02em; line-height: 1; }
+.auth-brand__name em { font-style: normal; background: var(--edge); color: var(--yellow); padding: 0 4px; margin-left: 2px; }
+
+.auth-card__body { padding: clamp(20px, 3vw, 36px); }
+.auth-card h1 { font-size: clamp(34px, 3.6vw, 56px); line-height: .95; letter-spacing: -.04em; }
+.login-subtitle {
+    display: inline-block; margin: 14px 0 26px; padding: 4px 10px;
+    background: var(--violet); color: var(--edge); border: var(--bw) solid var(--edge); font-size: 16px; line-height: 1.35;
+}
+
+/* ---------- Form ---------- */
+.auth-form { display: grid; gap: 18px 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.auth-form--single { grid-template-columns: minmax(0, 1fr); }
+.auth-form .field--wide, .auth-form .login-message, .auth-form .auth-submit { grid-column: 1 / -1; }
+.field { display: grid; gap: 6px; min-width: 0; align-content: start; }
+.field label { font-size: 13px; font-weight: var(--fw-heading); letter-spacing: .02em; }
+.auth-form .nb-input { font-size: 17px; }
+
+/* Select keeps its arrow even when .nb-input:focus resets the background */
+.auth-form select.nb-input {
+    appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 40px; font-size: 16px;
+    --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='4' stroke-linecap='square'%3E%3Cpath d='m5 9 7 7 7-7'/%3E%3C/svg%3E");
+    background-image: var(--chevron); background-repeat: no-repeat; background-position: right 10px center; background-size: 20px;
+}
+.auth-form select.nb-input:focus, .auth-form select.nb-input:focus-visible {
+    background-image: var(--chevron); background-repeat: no-repeat; background-position: right 10px center; background-size: 20px;
+}
+
+/* Message box. data.js sets class "login-message error|success" */
+.login-message {
+    position: relative; margin: 0; padding: 12px 14px 12px 62px; min-height: 48px;
+    border: var(--bw) solid var(--edge); box-shadow: var(--shadow-sm); color: var(--edge);
+    font-size: 15px; font-weight: var(--fw-heading); line-height: 1.3;
+}
+.login-message::before {
+    content: "!"; position: absolute; left: 0; top: 0; bottom: 0; width: 46px; display: grid; place-items: center;
+    background: var(--edge); color: var(--yellow); font-size: 24px; line-height: 1;
+}
+.login-message.error { background: var(--pink); }
+.login-message.success { background: var(--yellow); }
+.login-message.success::before { content: "✓"; }
+
+.auth-submit { min-height: 60px; font-size: 16px; letter-spacing: .02em; box-shadow: var(--shadow-md); }
+.auth-submit:hover { box-shadow: var(--shadow-lift); }
+
+.auth-or { display: flex; align-items: center; gap: 14px; margin: 26px 0 18px; font-size: 13px; font-weight: var(--fw-heading); letter-spacing: .02em; }
+.auth-or::before, .auth-or::after { content: ""; flex: 1; height: 4px; background: var(--edge); }
+.back-link { min-height: 56px; text-align: center; }
+
+/* Narrow poster column: one card per row (text keeps its room, height still filled) */
+@container (max-width: 440px) {
+    .poster-grid { grid-template-columns: minmax(0, 1fr); grid-auto-rows: minmax(min-content, 1fr); }
+    .pcard .nb-badge { display: none; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1000px) {
+    .auth, .auth--register { grid-template-columns: minmax(0, 1fr); }
+    .auth-poster { padding: 28px var(--gutter); gap: 18px; border-right: 0; border-bottom: var(--bw-thick) solid var(--edge); }
+    .poster-title { font-size: clamp(40px, 11vw, 72px); font-size: clamp(40px, 13cqw, 84px); }
+    .poster-title .stroke-text { display: inline-block; margin-right: .2em; }
+    .poster-row { display: none; }
+    .poster-grid { min-height: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: auto; gap: 10px; }
+    .pcard, .pcard:nth-child(odd), .pcard:nth-child(even) { grid-template-columns: minmax(0, 1fr); transform: none; box-shadow: var(--shadow-sm); }
+    .pcard__text { display: none; }
+    .pcard__shape { border-right: 0; padding: 8px; }
+    .pcard .shape { width: 44px; }
+    .auth-main::before, .auth-main::after { display: none; }
+}
+@media (max-width: 640px) {
+    .poster-grid, .deco { display: none; }
+    .auth-poster { padding: 22px var(--gutter); }
+    .auth-main { padding-top: 24px; padding-bottom: 32px; }
+    .auth-card { box-shadow: var(--shadow-md); }
+    .auth-card__head { flex-wrap: wrap; }
+    .auth-brand__name { font-size: 21px; }
+}
+
+/* =====================================================
+   SHAPE LANGUAGE  (Playful Geometric)
+   ===================================================== */
+.marquee__track span { text-transform: uppercase; letter-spacing: .2em; }
+.poster-copy, .poster-tag { border-radius: var(--radius-sm); }
+.pcard { border-radius: var(--radius); overflow: hidden; }
+.pcard__text strong { font-family: var(--font-display); }
+.deco-diamond { border-radius: 8px; background: var(--pink); }
+.deco-ring { border-color: var(--edge); }
+.auth-main::before { background: var(--pink); }
+.auth-brand__mark { border-radius: 14px; background: var(--accent); color: #fff; }
+.auth-brand__name em { border-radius: 8px; }
+.login-subtitle { border-radius: var(--radius-full); padding: 4px 16px; }
+.login-message { border-radius: var(--radius); overflow: hidden; }
+.login-message.error { background: var(--urgent); }
+.login-message.success { background: var(--mint); }
+.login-message::before { background: var(--edge); }
+.field label { text-transform: uppercase; letter-spacing: .1em; }
+.auth-form .nb-input { font-size: 17px; }
+.auth-form--stacked { grid-template-columns: minmax(0, 1fr); }
+.auth-section-title { grid-column: 1 / -1; margin-top: 14px; padding-top: 22px; border-top: var(--bw) dashed var(--ink); font-size: 24px; }
+.auth--profile { grid-template-columns: minmax(0, 1fr); }
+.auth--profile .auth-card { max-width: 640px; margin: 0 auto; }
+.profile-actions { display: grid; gap: 12px; margin-top: 22px; }
+.field-note { grid-column: 1 / -1; margin-top: -6px; font-size: 13px; color: var(--muted); }
+.auth-poster { border-right-width: var(--bw-thick); }
+@media (max-width: 1000px) { .auth-poster { border-bottom-width: var(--bw-thick); } }
+.auth-section-title { margin-bottom: 18px; }
