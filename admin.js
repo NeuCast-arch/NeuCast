@@ -590,3 +590,13 @@ renderQuestions();
 if (window.location.hash === "#questions") {
     document.querySelector('[data-tab="questionsTab"]').click();
 }
+
+// Cloud sync: when new data arrives from another device (a student registering, a question), redraw the lists
+window.addEventListener("neucast:synced", function () {
+    announcements = sortPinnedFirst(loadAnnouncements());
+    students = loadStudents();
+    questions = loadQuestions();
+    renderDashboard();
+    renderStudents();
+    renderQuestions();
+});

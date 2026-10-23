@@ -261,6 +261,7 @@ const saveStudents = list => localStorage.setItem(STUDENTS_KEY, JSON.stringify(l
 
 // Returns { ok: true, student } or { ok: false, error }
 function registerStudent(info) {
+    if (window.NeuCloud) NeuCloud.pull();   // look at the shared database first
     const students = loadStudents();
     const email = info.email.toLowerCase();
 
@@ -297,6 +298,7 @@ const pendingStudents = () => loadStudents().filter(s => !isApproved(s));
 
 // Admin approves a waiting account
 function approveStudent(id) {
+    if (window.NeuCloud) NeuCloud.pull();   // look at the shared database first
     const students = loadStudents();
     const student = students.find(s => s.id === id);
     if (!student) return false;
@@ -308,6 +310,7 @@ function approveStudent(id) {
 
 // Returns { ok: true, student }, { ok: false, pending: true } or { ok: false }
 function loginStudent(email, password) {
+    if (window.NeuCloud) NeuCloud.pull();   // look at the shared database first
     const match = loadStudents().find(s => s.email === email.toLowerCase() && s.password === password);
     if (!match) return { ok: false };
     if (!isApproved(match)) return { ok: false, pending: true };
