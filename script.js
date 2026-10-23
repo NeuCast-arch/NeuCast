@@ -1,3 +1,26 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDMfof-dCkVjfgayknV65F29uYh7bi-h_s",
+  authDomain: "neucast-55d0c.firebaseapp.com",
+  databaseURL: "https://neucast-55d0c-default-rtdb.firebaseio.com",
+  projectId: "neucast-55d0c",
+  storageBucket: "neucast-55d0c.firebasestorage.app",
+  messagingSenderId: "805265525390",
+  appId: "1:805265525390:web:899a4ee9b2daa4099357df",
+  measurementId: "G-J8YGXRG6VF"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
 // ===== 1. Who is viewing the page? =====
 const student = getCurrentStudent();
 const adminView = isLoggedIn();
