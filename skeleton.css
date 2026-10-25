@@ -1,0 +1,80 @@
+/* =====================================================
+   NEUCAST SKELETON LOADERS
+   Placeholders with the SAME layout as the real content, so the page
+   does not jump when data arrives.
+
+   Blocks   .sk  .sk-line (.w-20 .w-30 .w-40 .w-60 .w-80 .w-100 .lg)  .sk-circle  .sk-tile  .sk-pill  .sk-block
+   Parts    .sk-notice  .sk-row  .sk-stat  .sk-ring  .sk-calendar  .sk-form
+   Wrapper  <div class="sk-group" aria-busy="true"> ... </div>
+
+   - A soft light sweep moves across every block.
+   - With "reduce motion" on, the sweep stops; blocks sit still.
+   - Screen readers hear one "Loading..." (.sk-status), not the shapes.
+   - Colors come from --surface-2, so they are gentle in dark mode too.
+   ===================================================== */
+
+.sk {
+    --sk-glow: color-mix(in srgb, var(--surface) 70%, var(--surface-2));
+    position: relative; display: block; overflow: hidden;
+    background: var(--surface-2); border-radius: var(--r-sm);
+}
+.sk::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(100deg, transparent 20%, var(--sk-glow) 50%, transparent 80%);
+    transform: translateX(-100%);
+    animation: sk-sweep 1.5s var(--ease) infinite;
+}
+@keyframes sk-sweep { to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { .sk::after { animation: none; display: none; } }
+
+.sk-line { height: .75rem; border-radius: 6px; }
+.sk-line + .sk-line { margin-top: .625rem; }
+.sk-line.lg { height: 1.125rem; }
+.sk-line.w-20 { width: 20%; } .sk-line.w-30 { width: 30%; } .sk-line.w-40 { width: 40%; }
+.sk-line.w-60 { width: 60%; } .sk-line.w-80 { width: 80%; } .sk-line.w-100 { width: 100%; }
+.sk-circle { border-radius: 50%; width: 2.5rem; height: 2.5rem; flex-shrink: 0; }
+.sk-block { border-radius: var(--r); min-height: 2.5rem; }
+.sk-tile { width: 2.5rem; height: 2.5rem; border-radius: var(--r); flex-shrink: 0; }
+.sk-pill { height: 2.25rem; width: 6rem; border-radius: var(--r-pill); }
+
+.sk-notice {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--sp-4); align-items: start;
+    padding: var(--sp-4) var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+}
+.sk-notice__meta { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.sk-notice__meta .sk { height: 1.25rem; border-radius: var(--r-pill); }
+.sk-notice__foot { display: flex; justify-content: space-between; align-items: center; margin-top: var(--sp-4); }
+
+.sk-row { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+.sk-row > div { flex: 1; min-width: 0; }
+
+.sk-stat { display: flex; align-items: center; gap: var(--sp-4); padding: var(--sp-4) var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); }
+.sk-stat > div { flex: 1; }
+
+.sk-ring { display: flex; align-items: center; gap: var(--sp-4); padding: var(--sp-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); }
+.sk-ring .sk-circle { width: 3.5rem; height: 3.5rem; }
+.sk-ring > div { flex: 1; }
+
+.sk-calendar { padding: var(--sp-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); }
+.sk-calendar__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: var(--sp-4); }
+.sk-calendar__grid .sk { aspect-ratio: 1; border-radius: var(--r-sm); }
+
+.sk-form { display: grid; gap: var(--sp-4); }
+.sk-form .sk-block { min-height: 3rem; }
+
+.sk-group { display: grid; gap: var(--sp-4); }
+.sk-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.sk-fade-in { animation: sk-in var(--dur-2) var(--ease) both; }
+@keyframes sk-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* Busy button: a small spinner appears in front of the label (NeuUI.busy) */
+.is-busy { pointer-events: none; cursor: progress; }
+.is-busy::before {
+    content: ""; flex-shrink: 0; width: 1em; height: 1em;
+    border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent;
+    animation: spin .7s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .is-busy::before { animation: none; border-right-color: currentColor; opacity: .6; }
+}

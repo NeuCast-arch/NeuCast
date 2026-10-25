@@ -3,104 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#F5F6F8">
     <title>My Profile - NeuCast</title>
+    <script src="theme.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="skeleton.css">
     <link rel="stylesheet" href="components.css">
     <link rel="stylesheet" href="auth.css">
 </head>
 
 <body class="auth-page">
+    <a class="skip-link" href="#main">Skip to your profile</a>
+    <noscript><p class="alert alert--warning" style="margin:1rem">NeuCast needs JavaScript to show your profile. Please turn it on in your browser.</p></noscript>
 
-    <div class="marquee" aria-hidden="true">
-        <div class="marquee__track">
-            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-        </div>
-    </div>
+    <div class="auth auth--single">
+        <main id="main" class="auth-main" tabindex="-1">
+            <div class="auth-main__inner">
 
-    <div class="auth auth--profile">
-        <main class="auth-main">
-            <div class="auth-card nb-panel">
-                <header class="auth-card__head nb-panel__head">
-                    <span class="auth-brand">
-                        <span class="auth-brand__mark" data-icon="neucast"></span>
-                        <span class="auth-brand__name">NEU<em>CAST</em></span>
-                    </span>
-                    <span class="nb-badge nb-badge--ink">New Era University</span>
-                </header>
+                <div class="auth-topbar">
+                    <a class="brand" href="index.html">
+                        <span class="brand-mark" data-icon="neucast" aria-hidden="true"></span>
+                        <span class="brand-text"><span class="brand-name">NeuCast</span><span class="brand-sub">New Era University</span></span>
+                    </a>
+                    <a href="index.html" class="btn btn--secondary btn--sm"><span data-icon="arrowleft"></span> Back to announcements</a>
+                </div>
 
-                <div class="auth-card__body">
-                    <h1>My Profile</h1>
-                    <p class="login-subtitle">Update your details</p>
+                <div class="panel auth-card">
+                    <h1>My profile</h1>
+                    <p class="auth-sub">Update your details.</p>
 
-                    <form id="profileForm" class="auth-form">
-                        <div class="field field--wide">
-                            <label for="fullName">Full Name</label>
-                            <input type="text" id="fullName" class="nb-input" autocomplete="name">
+                    <!-- Placeholder with the same footprint as the form; profile.js removes it -->
+                    <div id="profileSkeleton" aria-busy="true">
+                        <div class="sk-form" aria-hidden="true">
+                            <span class="sk sk-block wide"></span>
+                            <span class="sk sk-block"></span>
+                            <span class="sk sk-block"></span>
+                            <span class="sk sk-block"></span>
+                            <span class="sk sk-block"></span>
+                            <span class="sk sk-block wide" style="width:100%"></span>
                         </div>
-                        <div class="field">
-                            <label for="studentId">Student ID Number</label>
-                            <input type="text" id="studentId" class="nb-input" readonly>
-                        </div>
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" class="nb-input" readonly>
-                        </div>
-                        <p class="field-note">Your student ID and email can't be changed.</p>
-                        <div class="field">
-                            <label for="course">Course</label>
-                            <select id="course" class="nb-input"></select>
-                        </div>
-                        <div class="field">
-                            <label for="year">Year Level</label>
-                            <select id="year" class="nb-input"></select>
-                        </div>
+                        <span class="sk-status">Loading your profile...</span>
+                    </div>
 
-                        <p id="profileMessage" class="login-message" role="status" hidden></p>
+                    <div id="profileContent" hidden>
+                        <form id="profileForm" class="auth-form" novalidate>
+                            <div class="field field--wide">
+                                <label for="fullName">Full name</label>
+                                <input type="text" id="fullName" class="input" autocomplete="name" aria-required="true">
+                            </div>
+                            <div class="field">
+                                <label for="studentId">Student ID number</label>
+                                <input type="text" id="studentId" class="input" readonly aria-describedby="lockedHint">
+                            </div>
+                            <div class="field">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" class="input" readonly aria-describedby="lockedHint">
+                            </div>
+                            <p id="lockedHint" class="field__hint">Your student ID and email can't be changed.</p>
+                            <div class="field">
+                                <label for="course">Course</label>
+                                <select id="course" class="input"></select>
+                            </div>
+                            <div class="field">
+                                <label for="year">Year level</label>
+                                <select id="year" class="input"></select>
+                            </div>
 
-                        <button type="submit" class="auth-submit nb-btn nb-btn--accent nb-btn--block">Save changes</button>
-                    </form>
+                            <p id="profileMessage" class="login-message" role="status" hidden></p>
 
-                    <h2 class="auth-section-title">Change password</h2>
+                            <button type="submit" id="profileBtn" class="btn btn--block">Save changes</button>
+                        </form>
 
-                    <form id="passwordForm" class="auth-form auth-form--single">
-                        <div class="field">
-                            <label for="currentPassword">Current Password</label>
-                            <input type="password" id="currentPassword" class="nb-input" placeholder="Enter your current password" autocomplete="current-password">
+                        <h2 class="auth-section-title">Change password</h2>
+
+                        <form id="passwordForm" class="auth-form auth-form--single" novalidate>
+                            <div class="field">
+                                <label for="currentPassword">Current password</label>
+                                <input type="password" id="currentPassword" class="input" placeholder="Enter your current password" autocomplete="current-password" aria-required="true">
+                            </div>
+                            <div class="field">
+                                <label for="newPassword">New password</label>
+                                <input type="password" id="newPassword" class="input" placeholder="At least 6 characters" autocomplete="new-password" aria-required="true" aria-describedby="newPasswordHint">
+                                <span id="newPasswordHint" class="field__hint">At least 6 characters, and different from the current one.</span>
+                            </div>
+                            <div class="field">
+                                <label for="confirmNewPassword">Confirm new password</label>
+                                <input type="password" id="confirmNewPassword" class="input" placeholder="Repeat the new password" autocomplete="new-password" aria-required="true">
+                            </div>
+
+                            <p id="passwordMessage" class="login-message" role="status" hidden></p>
+
+                            <button type="submit" id="passwordBtn" class="btn btn--block">Change password</button>
+                        </form>
+
+                        <div class="profile-actions">
+                            <button id="logoutBtn" type="button" class="btn btn--danger btn--block"><span data-icon="logout"></span> Log out</button>
                         </div>
-                        <div class="field">
-                            <label for="newPassword">New Password</label>
-                            <input type="password" id="newPassword" class="nb-input" placeholder="At least 6 characters" autocomplete="new-password">
-                        </div>
-                        <div class="field">
-                            <label for="confirmNewPassword">Confirm New Password</label>
-                            <input type="password" id="confirmNewPassword" class="nb-input" placeholder="Type the new password again" autocomplete="new-password">
-                        </div>
-
-                        <p id="passwordMessage" class="login-message" role="status" hidden></p>
-
-                        <button type="submit" class="auth-submit nb-btn nb-btn--accent nb-btn--block">Change password</button>
-                    </form>
-
-                    <div class="profile-actions">
-                        <a href="index.html" class="back-link nb-btn nb-btn--secondary nb-btn--block"><span data-icon="arrowleft"></span> Back to announcements</a>
-                        <button id="logoutBtn" type="button" class="nb-btn nb-btn--danger nb-btn--block">Log out</button>
                     </div>
                 </div>
+
             </div>
         </main>
     </div>
 
-    <script src="icons.js"></script>
-    <script src="cloud-config.js"></script>
-    <script src="cloud.js"></script>
-    <script src="data.js"></script>
-    <script src="profile.js"></script>
+    <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js profile.js"></script>
 </body>
 </html>

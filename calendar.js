@@ -1,4 +1,6 @@
-// ===== Campus Calendar =====
+// ===== Campus Calendar (homepage) =====
+// Every day is a real button with a spoken label, like
+// "October 1, 2026, 2 announcements: Urgent, Academic", so it works with a screen reader.
 
 const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -6,8 +8,6 @@ const monthNames = [
 ];
 
 const today = new Date();
-
-// The month being shown (month 0 = January, 11 = December)
 let shownYear = today.getFullYear();
 let shownMonth = today.getMonth();
 
@@ -16,74 +16,72 @@ const calendarTitle = document.getElementById("calendarTitle");
 const calendarNote = document.getElementById("calendarNote");
 const calClear = document.getElementById("calClear");
 
-// Makes a list of the days that have announcements this viewer can see.
-// Each day holds the categories posted that day, like { "2026-10-1": ["urgent", "academic"] }
+// Days that have announcements this viewer can see: { "2026-10-1": ["urgent", "academic"] }
 function getBusyDays() {
     const busy = {};
-
     for (let i = 0; i < announcements.length; i++) {
         const item = announcements[i];
-
-        if (canSee(item)) {
-            const key = dateKey(new Date(item.date));
-            if (!busy[key]) busy[key] = [];
-            if (!busy[key].includes(getKey(item))) busy[key].push(getKey(item));
-        }
+        if (!canSee(item)) continue;
+        const key = dateKey(new Date(item.date));
+        if (!busy[key]) busy[key] = [];
+        if (!busy[key].includes(getKey(item))) busy[key].push(getKey(item));
     }
-
     return busy;
 }
 
-// Draws the calendar for the month being shown
 function renderCalendar() {
     calendarTitle.textContent = monthNames[shownMonth] + " " + shownYear;
-
     const busy = getBusyDays();
 
-    // What weekday is the 1st? (0 = Sunday ... 6 = Saturday)
     const firstWeekday = new Date(shownYear, shownMonth, 1).getDay();
-
-    // How many days are in this month? (day 0 of next month = last day of this month)
     const daysInMonth = new Date(shownYear, shownMonth + 1, 0).getDate();
 
     let html = "";
+    for (let i = 0; i < firstWeekday; i++) html += "<span></span>";
 
-    // Empty boxes before the 1st
-    for (let i = 0; i < firstWeekday; i++) {
-        html += "<span></span>";
+    // Count announcements per day for the spoken label
+    const perDay = {};
+    for (let i = 0; i < announcements.length; i++) {
+        if (!canSee(announcements[i])) continue;
+        const k = dateKey(new Date(announcements[i].date));
+        perDay[k] = (perDay[k] || 0) + 1;
     }
 
-    // One button for each day
     for (let day = 1; day <= daysInMonth; day++) {
         const key = shownYear + "-" + (shownMonth + 1) + "-" + day;
+        const isToday = key === dateKey(today);
+        const selected = key === activeDate;
 
         let classes = "cal-day";
-        if (key === dateKey(today)) classes += " today";
+        if (isToday) classes += " today";
         if (busy[key]) classes += " has-news";
-        if (key === activeDate) classes += " selected";
+        if (selected) classes += " selected";
 
-        // Up to three small shapes under the number: one for each category posted that day
+        let label = monthNames[shownMonth] + " " + day + ", " + shownYear;
         let shapes = "";
-        let names = "";
         if (busy[key]) {
-            shapes = '<span class="cal-shapes">';
+            const names = busy[key].map(function (k) { return CATEGORIES[k].name; });
+            label += ", " + plural(perDay[key], "announcement", "announcements") + ": " + names.join(", ");
+            shapes = '<span class="cal-shapes" aria-hidden="true">';
             for (let i = 0; i < busy[key].length && i < 3; i++) {
                 const cat = CATEGORIES[busy[key][i]];
-                shapes += '<i class="cal-shape ' + cat.shape + " c-" + busy[key][i] + '"></i>';
+                shapes += '<i class="shape xs ' + cat.shape + " c-" + busy[key][i] + '"></i>';
             }
             shapes += "</span>";
-
-            names = ' title="' + busy[key].map(function (k) { return CATEGORIES[k].name; }).join(", ") + '"';
+        } else {
+            label += ", no announcements";
         }
+        if (isToday) label += ", today";
 
-        html += '<button class="' + classes + '" data-key="' + key + '"' + names + ">" + day + shapes + "</button>";
+        html += '<button type="button" class="' + classes + '" data-key="' + key + '" aria-label="' + label + '" aria-pressed="' + selected + '"' +
+            (isToday ? ' aria-current="date"' : "") + ">" + day + shapes + "</button>";
     }
 
     calendarGrid.innerHTML = html;
+    calendarGrid.setAttribute("aria-busy", "false");
 
-    // The note under the calendar
     if (activeDate === "") {
-        calendarNote.textContent = "Shapes under a day show which categories were posted. Click a day to see them.";
+        calendarNote.textContent = "Shapes under a day show which categories were posted. Pick a day to see them.";
         calClear.hidden = true;
     } else {
         calendarNote.textContent = "Showing announcements from the selected day only.";
@@ -91,59 +89,43 @@ function renderCalendar() {
     }
 }
 
-// Click a day: show only that day's announcements. Click it again to show everything.
+// Pick a day: show only that day's announcements. Pick it again to show everything.
 calendarGrid.addEventListener("click", function (event) {
     const day = event.target.closest(".cal-day");
-    if (!day) return; // the click was not on a day button
+    if (!day) return;
     const key = day.dataset.key;
 
-    if (activeDate === key) {
-        activeDate = "";
-    } else {
-        activeDate = key;
-    }
-
+    activeDate = activeDate === key ? "" : key;
     renderCalendar();
     renderCards();
 
-    if (activeDate !== "") {
-        scrollToList();
-    }
+    const again = calendarGrid.querySelector('[data-key="' + key + '"]');
+    if (again) again.focus();
+    if (activeDate !== "") scrollToList();
 });
 
-// Previous month
 document.getElementById("calPrev").addEventListener("click", function () {
-    shownMonth = shownMonth - 1;
-    if (shownMonth < 0) {
-        shownMonth = 11;
-        shownYear = shownYear - 1;
-    }
+    shownMonth -= 1;
+    if (shownMonth < 0) { shownMonth = 11; shownYear -= 1; }
     renderCalendar();
 });
 
-// Next month
 document.getElementById("calNext").addEventListener("click", function () {
-    shownMonth = shownMonth + 1;
-    if (shownMonth > 11) {
-        shownMonth = 0;
-        shownYear = shownYear + 1;
-    }
+    shownMonth += 1;
+    if (shownMonth > 11) { shownMonth = 0; shownYear += 1; }
     renderCalendar();
 });
 
-// Jump back to this month
 document.getElementById("calToday").addEventListener("click", function () {
     shownYear = today.getFullYear();
     shownMonth = today.getMonth();
     renderCalendar();
 });
 
-// Show all dates again
 calClear.addEventListener("click", function () {
     activeDate = "";
     renderCalendar();
     renderCards();
 });
 
-// Start
 renderCalendar();

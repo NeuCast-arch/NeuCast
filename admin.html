@@ -3,106 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#F5F6F8">
     <title>Admin Dashboard - NeuCast</title>
+    <script src="theme.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="skeleton.css">
     <link rel="stylesheet" href="components.css">
     <link rel="stylesheet" href="admin.css">
 </head>
 
 <body class="admin-page">
+    <a class="skip-link" href="#main">Skip to the dashboard</a>
 
-    <header class="admin-top">
-        <a class="admin-brand" href="admin.html" aria-label="NeuCast admin">
-            <span class="admin-brand__mark" data-icon="neucast"></span>
-            <span class="admin-brand__name">NEU<em>CAST</em> <small>Admin</small></span>
-        </a>
-        <div class="admin-top__right">
-            <a href="index.html" class="nb-btn nb-btn--sm"><span data-icon="home"></span> Homepage</a>
-            <button id="logoutBtn" class="nb-btn nb-btn--sm nb-btn--ink">Log out</button>
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="admin.html" aria-label="NeuCast admin home">
+                <span class="brand-mark" data-icon="neucast"></span>
+                <span class="brand-name">NeuCast</span>
+                <span class="tag tag--primary">Admin</span>
+            </a>
+            <div class="site-header__right">
+                <a href="index.html" class="btn btn--secondary btn--sm" aria-label="Homepage"><span data-icon="home"></span><span class="hide-sm">Homepage</span></a>
+                <button id="logoutBtn" type="button" class="btn btn--ghost btn--sm"><span data-icon="logout"></span><span class="hide-sm">Log out</span><span class="sr-only show-sm">Log out</span></button>
+            </div>
         </div>
     </header>
 
-    <main id="dashboard" class="admin-main" hidden>
+    <main id="main" tabindex="-1" class="admin-main">
+        <noscript><p class="alert alert--warning">NeuCast needs JavaScript to run. Please turn it on and reload.</p></noscript>
 
-        <h1 class="admin-title">Dashboard</h1>
+        <div id="dashboard" class="admin-stack">
 
-        <section class="stats" aria-label="Totals">
-            <div class="stat-box c-events"><span class="shape square sm" aria-hidden="true"></span><span id="totalCount" class="stat-number">0</span><span class="stat-label">Announcements</span></div>
-            <div class="stat-box c-urgent"><span class="shape triangle sm" aria-hidden="true"></span><span id="urgentCount" class="stat-number">0</span><span class="stat-label">Urgent</span></div>
-            <div class="stat-box c-academic"><span class="shape circle sm" aria-hidden="true"></span><span id="academicCount" class="stat-number">0</span><span class="stat-label">Academic</span></div>
-            <div class="stat-box c-general"><span class="shape hexagon sm" aria-hidden="true"></span><span id="studentCount" class="stat-number">0</span><span class="stat-label">Students</span></div>
-        </section>
+            <h1 class="admin-title">Dashboard</h1>
 
-        <section class="shape-chart nb-panel" aria-labelledby="chartTitle">
-            <div class="nb-panel__head"><h2 id="chartTitle" class="chart-title">Announcements by category</h2></div>
-            <div class="nb-panel__body">
-                <p class="chart-note">Each shape's <strong>area</strong> equals its number of announcements (1 announcement = 1 unit²).</p>
-                <div id="shapeChart" class="shape-chart-grid"></div>
+            <section id="statsSection" aria-label="Totals" aria-busy="true">
+                <div id="statsSkeleton" class="stats" data-sk>
+                    <div class="sk-stat" aria-hidden="true"><span class="sk sk-tile"></span><div><span class="sk sk-line lg w-40"></span><span class="sk sk-line w-60"></span></div></div>
+                    <div class="sk-stat" aria-hidden="true"><span class="sk sk-tile"></span><div><span class="sk sk-line lg w-40"></span><span class="sk sk-line w-60"></span></div></div>
+                    <div class="sk-stat" aria-hidden="true"><span class="sk sk-tile"></span><div><span class="sk sk-line lg w-40"></span><span class="sk sk-line w-60"></span></div></div>
+                    <div class="sk-stat" aria-hidden="true"><span class="sk sk-tile"></span><div><span class="sk sk-line lg w-40"></span><span class="sk sk-line w-60"></span></div></div>
+                    <span class="sk-status">Loading totals...</span>
+                </div>
+                <div class="stats" id="statsReal" hidden>
+                    <div class="stat c-events"><span class="shape-tile lg"><span class="shape square" aria-hidden="true"></span></span><div><span id="totalCount" class="stat-number">0</span><span class="stat-label">Announcements</span></div></div>
+                    <div class="stat c-urgent"><span class="shape-tile lg"><span class="shape triangle" aria-hidden="true"></span></span><div><span id="urgentCount" class="stat-number">0</span><span class="stat-label">Urgent</span></div></div>
+                    <div class="stat c-academic"><span class="shape-tile lg"><span class="shape circle" aria-hidden="true"></span></span><div><span id="academicCount" class="stat-number">0</span><span class="stat-label">Academic</span></div></div>
+                    <div class="stat c-general"><span class="shape-tile lg"><span class="shape hexagon" aria-hidden="true"></span></span><div><span id="studentCount" class="stat-number">0</span><span class="stat-label">Students</span></div></div>
+                </div>
+            </section>
+
+            <section class="panel" aria-labelledby="chartTitle" id="chartPanel" aria-busy="true">
+                <div class="panel__head"><h2 id="chartTitle">Announcements by category</h2></div>
+                <div class="panel__body">
+                    <p class="chart-note">Each shape's <strong>area</strong> equals its number of announcements (1 announcement = 1 unit&sup2;).</p>
+                    <div id="shapeChart" class="shape-chart-grid">
+                        <div class="sk-block sk" data-sk style="min-height:9rem"></div>
+                        <div class="sk-block sk" data-sk style="min-height:9rem"></div>
+                        <div class="sk-block sk" data-sk style="min-height:9rem"></div>
+                        <div class="sk-block sk" data-sk style="min-height:9rem"></div>
+                    </div>
+                </div>
+            </section>
+
+            <div>
+                <div class="tabs" role="tablist" aria-label="Dashboard sections">
+                    <button class="tab-btn" role="tab" id="tab-announcements" type="button" data-tab="announcementsTab" aria-controls="announcementsTab" aria-selected="true" tabindex="0"><span data-icon="megaphone"></span> Announcements</button>
+                    <button class="tab-btn" role="tab" id="tab-students" type="button" data-tab="studentsTab" aria-controls="studentsTab" aria-selected="false" tabindex="-1"><span data-icon="cap"></span> Students <span id="pendingBadge" class="tag tag--warning" hidden>0</span></button>
+                    <button class="tab-btn" role="tab" id="tab-questions" type="button" data-tab="questionsTab" aria-controls="questionsTab" aria-selected="false" tabindex="-1"><span data-icon="help"></span> Questions <span id="questionBadge" class="tag tag--warning" hidden>0</span></button>
+                </div>
+
+                <section id="announcementsTab" class="tab-panel" role="tabpanel" aria-labelledby="tab-announcements">
+                    <div class="tab-head">
+                        <h2>Announcements</h2>
+                        <button id="newBtn" type="button" class="btn"><span data-icon="plus"></span> New announcement</button>
+                    </div>
+                    <div id="adminList" class="admin-list" aria-busy="true">
+                        <div class="sk-row" data-sk aria-hidden="true"><span class="sk sk-tile"></span><div><span class="sk sk-line w-60"></span><span class="sk sk-line w-40"></span></div></div>
+                        <div class="sk-row" data-sk aria-hidden="true"><span class="sk sk-tile"></span><div><span class="sk sk-line w-60"></span><span class="sk sk-line w-40"></span></div></div>
+                        <div class="sk-row" data-sk aria-hidden="true"><span class="sk sk-tile"></span><div><span class="sk sk-line w-60"></span><span class="sk sk-line w-40"></span></div></div>
+                    </div>
+                    <div id="emptyMessage" class="empty" hidden>
+                        <span class="shape-tile lg c-events"><span class="shape square" aria-hidden="true"></span></span>
+                        <h3>No announcements yet</h3>
+                        <p>Post the first one and students will see it right away.</p>
+                        <button id="newBtnEmpty" type="button" class="btn"><span data-icon="plus"></span> New announcement</button>
+                    </div>
+                </section>
+
+                <section id="studentsTab" class="tab-panel" role="tabpanel" aria-labelledby="tab-students" hidden>
+                    <div id="pendingSection" hidden>
+                        <div class="tab-head"><h2>Waiting for approval</h2></div>
+                        <div id="pendingList" class="admin-list"></div>
+                    </div>
+                    <div class="tab-head"><h2>Registered students</h2></div>
+                    <div id="courseCounts" class="course-counts"></div>
+                    <div class="filters">
+                        <select id="studentCourseFilter" class="input" aria-label="Filter by course">
+                            <option value="">All courses</option>
+                        </select>
+                        <input type="search" id="studentSearch" class="input" placeholder="Search by name, ID, or email" aria-label="Search students">
+                    </div>
+                    <p id="studentResultText" class="result-count" aria-live="polite"></p>
+                    <div id="studentList" class="admin-list"></div>
+                    <p id="noStudents" class="empty" hidden></p>
+                </section>
+
+                <section id="questionsTab" class="tab-panel" role="tabpanel" aria-labelledby="tab-questions" hidden>
+                    <div class="tab-head"><h2>Student questions</h2></div>
+                    <div class="filters">
+                        <select id="questionFilter" class="input" aria-label="Filter questions">
+                            <option value="all">All questions</option>
+                            <option value="pending">Unanswered</option>
+                            <option value="answered">Answered</option>
+                        </select>
+                    </div>
+                    <p id="questionResultText" class="result-count" aria-live="polite"></p>
+                    <div id="questionList" class="admin-list"></div>
+                    <p id="noQuestions" class="empty" hidden></p>
+                </section>
             </div>
-        </section>
 
-        <div class="tabs" role="tablist" aria-label="Dashboard sections">
-            <button class="tab-btn active" role="tab" data-tab="announcementsTab"><span data-icon="megaphone"></span> Announcements</button>
-            <button class="tab-btn" role="tab" data-tab="studentsTab"><span data-icon="cap"></span> Students <span id="pendingBadge" class="tab-badge" hidden>0</span></button>
-            <button class="tab-btn" role="tab" data-tab="questionsTab"><span data-icon="help"></span> Questions <span id="questionBadge" class="tab-badge" hidden>0</span></button>
         </div>
+    </main>
 
-        <section id="announcementsTab" class="tab-panel">
-            <div class="dashboard-actions">
-                <h2>Announcements</h2>
-                <button id="newBtn" class="nb-btn nb-btn--accent">+ New announcement</button>
-            </div>
-            <div id="adminList" class="admin-list"></div>
-            <p id="emptyMessage" class="no-results" hidden>No announcements yet. Post the first one with the button above.</p>
-        </section>
-
-        <section id="studentsTab" class="tab-panel" hidden>
-            <div id="pendingSection" hidden>
-                <div class="dashboard-actions"><h2>Waiting for approval</h2></div>
-                <div id="pendingList"></div>
-            </div>
-            <div class="dashboard-actions"><h2>Registered students</h2></div>
-            <div id="courseCounts" class="course-counts"></div>
-            <div class="student-filters">
-                <select id="studentCourseFilter" class="nb-input" aria-label="Filter by course">
-                    <option value="">All courses</option>
-                </select>
-                <input type="text" id="studentSearch" class="nb-input" placeholder="Search by name, ID, or email" aria-label="Search students">
-            </div>
-            <div id="studentList"></div>
-            <p id="noStudents" class="no-results" hidden>No students have registered yet.</p>
-        </section>
-
-        <section id="questionsTab" class="tab-panel" hidden>
-            <div class="dashboard-actions"><h2>Student questions</h2></div>
-            <div class="student-filters">
-                <select id="questionFilter" class="nb-input" aria-label="Filter questions">
-                    <option value="all">All questions</option>
-                    <option value="pending">Unanswered</option>
-                    <option value="answered">Answered</option>
-                </select>
-            </div>
-            <div id="questionList"></div>
-            <p id="noQuestions" class="no-results" hidden>No questions yet.</p>
-        </section>
-
-        <div id="formModal" class="modal nb-modal" hidden>
-            <div class="modal-content nb-modal__content" role="dialog" aria-modal="true" aria-labelledby="formTitle">
-                <button id="closeForm" class="close-btn" data-icon="close" aria-label="Close"></button>
+    <div id="formModal" class="modal" hidden>
+        <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+            <div class="modal__head">
                 <h2 id="formTitle">New announcement</h2>
-
-                <form id="announcementForm" class="announcement-form">
+                <button id="closeForm" type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="close"></span></button>
+            </div>
+            <form id="announcementForm" class="modal__form" novalidate>
+                <div class="modal__body form-grid">
                     <div class="field">
                         <label for="titleInput">Title</label>
-                        <input type="text" id="titleInput" class="nb-input" placeholder="e.g. Library closed on Friday">
+                        <input type="text" id="titleInput" class="input" placeholder="e.g. Library closed on Friday" aria-required="true">
                     </div>
                     <div class="field">
                         <label for="categoryInput">Category</label>
-                        <select id="categoryInput" class="nb-input">
+                        <select id="categoryInput" class="input">
                             <option value="urgent">Urgent</option>
                             <option value="academic">Academic</option>
                             <option value="events">Events</option>
@@ -111,35 +153,33 @@
                     </div>
                     <div class="field">
                         <label for="audienceInput">Send to</label>
-                        <select id="audienceInput" class="nb-input">
+                        <select id="audienceInput" class="input">
                             <option value="all">All students (university-wide)</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="detailsInput">Details</label>
-                        <textarea id="detailsInput" class="nb-input" rows="5" placeholder="Write the full announcement"></textarea>
+                        <textarea id="detailsInput" class="input" rows="5" placeholder="Write the full announcement" aria-required="true"></textarea>
                     </div>
                     <div class="field">
                         <label for="expiresInput">Expires on (optional)</label>
-                        <input type="date" id="expiresInput" class="nb-input">
+                        <input type="date" id="expiresInput" class="input" aria-describedby="expiresHint">
+                        <p id="expiresHint" class="field__hint">After this day the notice is marked as expired for students.</p>
                     </div>
 
                     <label class="check-option"><input type="checkbox" id="pinInput"> <span><span data-icon="pin"></span> Pin to top of the homepage</span></label>
                     <label class="check-option"><input type="checkbox" id="ackInput"> <span><span data-icon="shield"></span> Ask students to confirm they've read it</span></label>
 
                     <p id="formMessage" class="login-message error" role="alert" hidden></p>
-
-                    <button type="submit" id="submitBtn" class="nb-btn nb-btn--accent nb-btn--block">Post announcement</button>
-                </form>
-            </div>
+                </div>
+                <div class="modal__foot">
+                    <button type="button" class="btn btn--secondary" data-close>Cancel</button>
+                    <button type="submit" id="submitBtn" class="btn">Post announcement</button>
+                </div>
+            </form>
         </div>
+    </div>
 
-    </main>
-
-    <script src="icons.js"></script>
-    <script src="cloud-config.js"></script>
-    <script src="cloud.js"></script>
-    <script src="data.js"></script>
-    <script src="admin.js"></script>
+    <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js admin.js"></script>
 </body>
 </html>

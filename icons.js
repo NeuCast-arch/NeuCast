@@ -29,7 +29,15 @@ const ICON_PATHS = {
     calculator: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/><path d="M8 16h.01"/><path d="M12 16h.01"/><path d="M16 16h.01"/>',
     send: '<path d="M21 3 10 14"/><path d="M21 3l-7 18-4-7-7-4z"/>',
     arrowleft: '<path d="M19 12H5"/><path d="m11 6-6 6 6 6"/>',
-    arrowright: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>'
+    arrowright: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+    menu: '<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>',
+    chevrondown: '<path d="m6 9 6 6 6-6"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    inbox: '<path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5.5 5h13L21 13v6H3v-6z"/>',
+    edit: '<path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17z"/><path d="m14.5 7.5 3 3"/>',
+    logout: '<path d="M10 4H5v16h5"/><path d="M16 8l4 4-4 4"/><path d="M20 12H9"/>',
+    plus: '<path d="M12 5v14"/><path d="M5 12h14"/>',
+    trash: '<path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/>'
 };
 
 // Returns an icon as HTML. Use it inside text, like: icon("home") + " Home"

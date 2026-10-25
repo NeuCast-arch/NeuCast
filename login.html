@@ -3,106 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#F5F6F8">
     <title>Login - NeuCast</title>
+    <script src="theme.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="skeleton.css">
     <link rel="stylesheet" href="components.css">
     <link rel="stylesheet" href="auth.css">
 </head>
 
 <body class="auth-page">
-
-    <div class="marquee" aria-hidden="true">
-        <div class="marquee__track">
-            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-            <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-        </div>
-    </div>
+    <a class="skip-link" href="#main">Skip to the form</a>
+    <noscript><p class="alert alert--warning" style="margin:1rem">NeuCast needs JavaScript to log you in. Please turn it on in your browser.</p></noscript>
 
     <div class="auth">
 
-        <!-- Decorative poster (hidden from screen readers) -->
-        <section class="auth-poster" aria-hidden="true">
-            <div class="deco deco-diamond"></div>
-            <div class="deco deco-ring"></div>
+        <aside class="auth-aside" aria-label="About NeuCast">
+            <div class="auth-aside__inner">
+                <a class="brand" href="login.html">
+                    <span class="brand-mark" data-icon="neucast" aria-hidden="true"></span>
+                    <span class="brand-text"><span class="brand-name">NeuCast</span><span class="brand-sub">New Era University</span></span>
+                </a>
 
-            <p class="poster-title">
-                <span class="stroke-text">Stay</span>Updated
-                <span class="sticker">with Your University</span>
-            </p>
-            <div class="poster-row">
-                <p class="poster-copy">Get the latest announcements, events, and important updates, all in one place.</p>
-                <div class="poster-tag">Your campus.<br>Your information.<br>Your connection.</div>
+                <div class="auth-aside__copy">
+                    <p class="auth-aside__title">Stay updated with your university.</p>
+                    <p class="auth-aside__text">Announcements, events and important updates, all in one place.</p>
+                    <ul class="auth-legend">
+                        <li class="c-academic"><span class="shape-tile"><span class="shape circle" aria-hidden="true"></span></span><span><strong>Academic</strong><span class="desc">Exams, Enrollment, Classes</span></span></li>
+                        <li class="c-events"><span class="shape-tile"><span class="shape square" aria-hidden="true"></span></span><span><strong>Events</strong><span class="desc">Activities, Seminars, Programs</span></span></li>
+                        <li class="c-urgent"><span class="shape-tile"><span class="shape triangle" aria-hidden="true"></span></span><span><strong>Urgent</strong><span class="desc">Emergency, Suspension, Alerts</span></span></li>
+                        <li class="c-general"><span class="shape-tile"><span class="shape hexagon" aria-hidden="true"></span></span><span><strong>General</strong><span class="desc">Notices, Updates, Other</span></span></li>
+                    </ul>
+                </div>
+
+                <p class="auth-aside__foot">Your campus. Your information. Your connection.</p>
             </div>
+        </aside>
 
-            <ul class="poster-grid">
-                <li class="pcard c-academic">
-                    <span class="pcard__shape"><span class="shape circle"></span></span>
-                    <span class="pcard__text"><strong>Academic</strong><span>Exams, Enrollment, Classes</span><em class="nb-badge">A = πr²</em></span>
-                </li>
-                <li class="pcard c-events">
-                    <span class="pcard__shape"><span class="shape square"></span></span>
-                    <span class="pcard__text"><strong>Events</strong><span>Activities, Seminars, Programs</span><em class="nb-badge">A = s²</em></span>
-                </li>
-                <li class="pcard c-urgent">
-                    <span class="pcard__shape"><span class="shape triangle"></span></span>
-                    <span class="pcard__text"><strong>Urgent</strong><span>Emergency, Suspension, Alerts</span><em class="nb-badge">A = ½ × b × h</em></span>
-                </li>
-                <li class="pcard c-general">
-                    <span class="pcard__shape"><span class="shape hexagon"></span></span>
-                    <span class="pcard__text"><strong>General</strong><span>Notices, Updates, Other</span><em class="nb-badge">A = (3√3 / 2) × s²</em></span>
-                </li>
-            </ul>
-        </section>
+        <main id="main" class="auth-main" tabindex="-1">
+            <div class="auth-main__inner">
+                <a class="brand auth-mobile-brand" href="login.html">
+                    <span class="brand-mark" data-icon="neucast" aria-hidden="true"></span>
+                    <span class="brand-text"><span class="brand-name">NeuCast</span><span class="brand-sub">New Era University</span></span>
+                </a>
 
-        <main class="auth-main">
-            <div class="auth-card nb-panel">
-                <header class="auth-card__head nb-panel__head">
-                    <span class="auth-brand">
-                        <span class="auth-brand__mark" data-icon="neucast"></span>
-                        <span class="auth-brand__name">NEU<em>CAST</em></span>
-                    </span>
-                    <span class="nb-badge nb-badge--ink">New Era University</span>
-                </header>
+                <div class="panel auth-card">
+                    <h1>Welcome back</h1>
+                    <p class="auth-sub">Log in to see your announcements.</p>
 
-                <div class="auth-card__body">
-                    <h1>Welcome Back</h1>
-                    <p class="login-subtitle">Log in to see your announcements</p>
-
-                    <form id="loginForm" class="auth-form auth-form--single">
+                    <form id="loginForm" class="auth-form auth-form--single" novalidate>
                         <div class="field">
                             <label for="email">Email</label>
-                            <input type="email" id="email" class="nb-input" placeholder="you@university.edu" autocomplete="email">
+                            <input type="email" id="email" class="input" placeholder="you@university.edu" autocomplete="email" inputmode="email" aria-required="true">
                         </div>
 
                         <div class="field">
                             <label for="password">Password</label>
-                            <input type="password" id="password" class="nb-input" placeholder="Enter your password" autocomplete="current-password">
+                            <input type="password" id="password" class="input" placeholder="Enter your password" autocomplete="current-password" aria-required="true">
                         </div>
 
                         <p id="loginMessage" class="login-message" role="alert" hidden></p>
 
-                        <button type="submit" class="auth-submit nb-btn nb-btn--accent nb-btn--block">Log In <span data-icon="arrowright"></span></button>
+                        <button type="submit" id="loginBtn" class="btn btn--block">Log in <span data-icon="arrowright"></span></button>
                     </form>
 
-                    <div class="auth-or" aria-hidden="true">or</div>
-
-                    <a href="register.html" class="back-link nb-btn nb-btn--secondary nb-btn--block">New student? Create an account</a>
+                    <p class="auth-switch">New student? <a href="register.html">Create an account</a></p>
                 </div>
             </div>
         </main>
 
     </div>
 
-    <script src="icons.js"></script>
-    <script src="cloud-config.js"></script>
-    <script src="cloud.js"></script>
-    <script src="data.js"></script>
-    <script src="login.js"></script>
+    <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js login.js"></script>
 </body>
 </html>

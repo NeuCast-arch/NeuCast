@@ -1,4 +1,19 @@
 const message = $("loginMessage");
+const loginForm = $("loginForm");
+const loginBtn = $("loginBtn");
+
+NeuUI.passwordToggles(document);
+
+// Typing in a field clears that field's error
+function clearOnInput(form) {
+    form.addEventListener("input", event => {
+        const field = event.target.closest(".field");
+        if (!field || !field.classList.contains("has-error")) return;
+        field.classList.remove("has-error");
+        event.target.removeAttribute("aria-invalid");
+    });
+}
+clearOnInput(loginForm);
 
 // Already logged in? Go to the right page
 if (isLoggedIn()) {
@@ -7,16 +22,36 @@ if (isLoggedIn()) {
     window.location.href = "index.html";
 }
 
-$("loginForm").addEventListener("submit", event => {
-    event.preventDefault();
+// Shows the banner and marks the field that needs attention
+function problem(text, input) {
+    showMessage(message, text, "error");
+    if (input) {
+        NeuUI.fieldError(input, text);
+        input.focus();
+    }
+}
 
-    const email = $("email").value.trim();
-    const password = $("password").value;
+loginForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    NeuUI.clearErrors(loginForm);
+    message.hidden = true;
+
+    const emailInput = $("email");
+    const passwordInput = $("password");
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
 
     if (email === "" || password === "") {
         showMessage(message, "Please enter your email and password.", "error");
+        if (email === "") NeuUI.fieldError(emailInput, "Please enter your email.");
+        if (password === "") NeuUI.fieldError(passwordInput, "Please enter your password.");
+        (email === "" ? emailInput : passwordInput).focus();
         return;
     }
+
+    // Show the spinner first: the next calls check the shared database and can take a moment
+    const done = NeuUI.busy(loginBtn, "Logging in...");
+    await NeuUI.nextPaint();
 
     // Admin account
     if (checkLogin(email, password)) {
@@ -34,10 +69,12 @@ $("loginForm").addEventListener("submit", event => {
         return;
     }
 
+    done();
+
     if (result.pending) {
-        showMessage(message, "Your account is waiting for admin approval. Please try again later.", "error");
+        problem("Your account is waiting for admin approval. Please try again later.", emailInput);
         return;
     }
 
-    showMessage(message, "Incorrect email or password.", "error");
+    problem("Incorrect email or password.", passwordInput);
 });

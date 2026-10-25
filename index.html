@@ -3,296 +3,273 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#F5F6F8">
   <title>NeuCast</title>
+  <script src="theme.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="tokens.css">
   <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="skeleton.css">
   <link rel="stylesheet" href="components.css">
   <link rel="stylesheet" href="home.css">
 </head>
 
 <body id="top">
+  <a class="skip-link" href="#announcements">Skip to announcements</a>
 
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee__track">
-      <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-      <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-      <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-      <span>NeuCast</span><span>Your campus</span><span>Your information</span><span>Your connection</span>
-    </div>
-  </div>
-
-  <header class="topbar">
-    <a href="#top" class="brand" aria-label="NeuCast home">
-      <span class="brand-mark">N</span>
-      <div>
-        <div class="brand-name">NEU<em>CAST</em></div>
-        <div class="brand-sub">University Information System</div>
-      </div>
-    </a>
-
-    <nav class="topnav" aria-label="Main"></nav>
-
-    <div class="top-right">
-      <button id="bellBtn" class="bell-btn" title="Urgent announcements" aria-label="Urgent announcements"><span data-icon="bell"></span><span id="bellCount" class="bell-count" hidden>0</span></button>
-      <a href="#top" id="userLink" class="user">
-        <span class="avatar" data-icon="user"></span>
-        <span class="user-text"><strong id="userName">Hello</strong><small id="userSub"></small></span>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="#top" class="brand" aria-label="NeuCast home">
+        <span class="brand-mark" data-icon="neucast"></span>
+        <span class="brand-text">
+          <span class="brand-name">NeuCast</span>
+          <span class="brand-sub">University Information System</span>
+        </span>
       </a>
+
+      <nav id="mainNav" class="topnav" aria-label="Main">
+        <a href="#announcements" class="nav-link js-show">Announcements</a>
+        <button type="button" class="nav-link" id="navRecovery" hidden>Needs you <span id="recoveryBadge" class="nav-badge" hidden>0</span></button>
+        <button type="button" class="nav-link" id="navQuestions">Questions <span id="questionsBadge" class="nav-badge" hidden>0</span></button>
+        <button type="button" class="nav-link" id="navAbout">About</button>
+      </nav>
+
+      <div class="top-right">
+        <button type="button" id="bellBtn" class="icon-btn" aria-label="Urgent announcements"><span data-icon="bell"></span><span id="bellCount" class="bell-count" hidden>0</span></button>
+        <button type="button" id="settingsBtn" class="icon-btn" aria-label="Settings"><span data-icon="sliders"></span></button>
+        <a href="#top" id="userLink" class="user">
+          <span class="avatar" data-icon="user" aria-hidden="true"></span>
+          <span class="user-text"><strong id="userName">Hello</strong><small id="userSub"></small></span>
+        </a>
+        <button type="button" id="menuBtn" class="icon-btn menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="mainNav"><span data-icon="menu"></span></button>
+      </div>
     </div>
   </header>
 
   <div class="layout">
 
-    <main class="main">
+    <main id="main" class="main" tabindex="-1">
 
-      <section class="hero">
-        <div class="deco deco-diamond"></div>
-        <div class="deco deco-ring"></div>
-
-        <div class="hero-text">
-          <h1>
-            <span class="stroke-text">Stay</span> Updated<br>
-            <span class="sticker">with Your University</span>
-          </h1>
-          <p>Get the latest announcements, events, and important updates, all in one place.</p>
-          <div class="hero-search">
-            <span class="search-icon" data-icon="search"></span>
-            <input type="text" id="searchInput" placeholder="Search announcements..." aria-label="Search announcements">
-            <button id="searchBtn">Search</button>
-          </div>
+      <section class="intro" aria-labelledby="greeting">
+        <div class="intro__text">
+          <h1 id="greeting">Welcome</h1>
+          <p id="studentInfo" class="intro__sub"></p>
         </div>
-
-        <div class="hero-shapes">
-          <div class="hero-shape-row">
-            <button type="button" class="deco-circle hero-shape c-academic" data-filter="academic" title="Show Academic announcements"></button>
-            <button type="button" class="deco-square hero-shape c-events" data-filter="events" title="Show Events announcements"></button>
-            <button type="button" class="deco-tri hero-shape c-urgent" data-filter="urgent" title="Show Urgent announcements"></button>
-            <button type="button" class="deco-hex hero-shape c-general" data-filter="general" title="Show General announcements"></button>
-          </div>
-        </div>
-
-        <div class="hero-tag">YOUR CAMPUS.<br>YOUR INFORMATION.<br>YOUR CONNECTION.</div>
+        <button id="studentAction" type="button" class="btn btn--ghost btn--sm"><span data-icon="logout"></span> Log out</button>
       </section>
 
-      <div class="student-bar">
-        <div>
-          <strong id="studentName"></strong>
-          <span id="studentInfo" class="course-hint"></span>
-        </div>
-        <button id="studentAction" class="student-action nb-btn nb-btn--sm">Log Out</button>
-      </div>
+      <form id="searchForm" class="search" role="search">
+        <label for="searchInput" class="sr-only">Search announcements</label>
+        <span class="search__icon" data-icon="search" aria-hidden="true"></span>
+        <input type="search" id="searchInput" class="input" placeholder="Search announcements" autocomplete="off" enterkeyhint="search">
+        <button type="submit" id="searchBtn" class="btn">Search</button>
+      </form>
 
-      <details id="recovery" class="recovery nb-panel nb-panel--pink" hidden>
-        <summary class="nb-panel__head recovery__summary">
-          <span class="recovery__head">
-            <span class="shape hexagon sm" style="--c:#fff" aria-hidden="true"></span>
-            <h2>Recovery Center</h2>
-            <span id="recoveryCount" class="recovery__count" aria-label="Items to catch up on">0</span>
-            <span class="recovery__chev" data-icon="arrowright" aria-hidden="true"></span>
-          </span>
-        </summary>
-        <div class="nb-panel__body">
-          <p class="recovery__intro">Announcements you may have missed: unread, waiting for your confirmation, edited since you read them, or already expired.</p>
-          <div class="recovery__tools" id="recoveryTools" role="group" aria-label="Recovery filters"></div>
-          <div id="recoveryList" class="recovery__list"></div>
-        </div>
-      </details>
-
-      <section id="categories" class="cat-row" aria-label="Categories"></section>
-
-      <div id="shapePrompt" class="shape-prompt"></div>
-
-      <section id="announcementArea" hidden>
-        <div class="section-head" id="announcements">
-          <h2>Latest Announcements</h2>
-          <div class="section-actions">
-            <button id="backToShapes" class="nb-btn nb-btn--sm nb-btn--violet"><span data-icon="arrowleft"></span> Back to shapes</button>
-            <button id="markAllRead" class="nb-btn nb-btn--sm"><span data-icon="check"></span> Mark all as read</button>
-            <button id="viewAll" class="nb-btn nb-btn--sm nb-btn--secondary">View All →</button>
+      <section id="announcementArea" class="board" aria-labelledby="announcementsTitle">
+        <div class="board__head" id="announcements">
+          <h2 id="announcementsTitle">Announcements</h2>
+          <div class="board__actions">
+            <button id="markAllRead" type="button" class="btn btn--secondary btn--sm"><span data-icon="check"></span> Mark all as read</button>
           </div>
         </div>
 
-        <nav id="sideNav" class="filter-bar" aria-label="Quick filters"></nav>
+        <div class="filters" role="group" aria-label="Filters">
+          <div id="categoryBar" class="filter-row" role="group" aria-label="Category"><span class="sk sk-pill" aria-hidden="true"></span><span class="sk sk-pill" aria-hidden="true"></span><span class="sk sk-pill" aria-hidden="true"></span><span class="sk sk-pill" aria-hidden="true"></span><span class="sk sk-pill" aria-hidden="true"></span></div>
+          <nav id="sideNav" class="filter-row filter-row--quiet" aria-label="Quick filters"><span class="sk sk-pill" aria-hidden="true"></span><span class="sk sk-pill" aria-hidden="true"></span><span class="sk sk-pill" aria-hidden="true"></span><span class="sk sk-pill" aria-hidden="true"></span></nav>
+        </div>
 
-        <section id="announcementList" class="announcements"></section>
-        <p id="noResults" class="no-results" hidden>No announcements found.</p>
+        <p id="resultCount" class="result-count" role="status" aria-live="polite"></p>
+
+        <div id="announcementList" class="notices" aria-busy="true">
+          <div class="sk-group" data-skeleton>
+            <div class="sk-notice" aria-hidden="true"><span class="sk sk-tile"></span><div><div class="sk-notice__meta"><span class="sk" style="width:5.5rem"></span><span class="sk" style="width:3.5rem"></span></div><span class="sk sk-line lg w-80"></span><span class="sk sk-line w-100"></span><span class="sk sk-line w-60"></span></div></div>
+            <div class="sk-notice" aria-hidden="true"><span class="sk sk-tile"></span><div><div class="sk-notice__meta"><span class="sk" style="width:5.5rem"></span><span class="sk" style="width:3.5rem"></span></div><span class="sk sk-line lg w-60"></span><span class="sk sk-line w-100"></span><span class="sk sk-line w-80"></span></div></div>
+            <div class="sk-notice" aria-hidden="true"><span class="sk sk-tile"></span><div><div class="sk-notice__meta"><span class="sk" style="width:5.5rem"></span><span class="sk" style="width:3.5rem"></span></div><span class="sk sk-line lg w-80"></span><span class="sk sk-line w-100"></span><span class="sk sk-line w-40"></span></div></div>
+            <span class="sk-status">Loading announcements...</span>
+          </div>
+        </div>
       </section>
 
     </main>
 
-    <aside class="right-panel">
-      <div id="readRing"></div>
+    <aside class="rail" aria-label="Your overview">
+      <div id="readRing" aria-busy="true">
+        <div class="sk-ring" aria-hidden="true"><span class="sk sk-circle"></span><div><span class="sk sk-line w-60"></span><span class="sk sk-line w-40"></span></div></div>
+        <span class="sk-status">Loading progress...</span>
+      </div>
 
-      <section class="shape-box nb-panel">
-        <h3>Campus Information by Shape</h3>
-        <div id="shapeList"></div>
+      <section id="needsCard" class="panel needs" hidden aria-labelledby="needsTitle"></section>
+
+      <section class="panel calendar-box" aria-labelledby="calendarHeading">
+        <div class="panel__head">
+          <h2 id="calendarHeading"><span data-icon="calendar" aria-hidden="true"></span>Campus calendar</h2>
+          <button id="calToday" type="button" class="link-btn">Today</button>
+        </div>
+        <div class="panel__body">
+          <div class="calendar-nav">
+            <button id="calPrev" type="button" class="icon-btn" aria-label="Previous month"><span data-icon="arrowleft"></span></button>
+            <strong id="calendarTitle" aria-live="polite"></strong>
+            <button id="calNext" type="button" class="icon-btn" aria-label="Next month"><span data-icon="arrowright"></span></button>
+          </div>
+          <div class="calendar-weekdays" aria-hidden="true">
+            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+          </div>
+          <div id="calendarGrid" class="calendar-grid" role="group" aria-label="Days of the month" aria-busy="true">
+            <div class="sk-calendar" aria-hidden="true" style="border:0;padding:0"><div class="sk-calendar__grid" style="margin-top:0"><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span></div></div>
+          </div>
+          <p id="calendarNote" class="calendar-note"></p>
+          <button id="calClear" type="button" class="link-btn" hidden>Show all dates</button>
+        </div>
       </section>
 
-      <section class="calendar-box nb-panel">
-
-        <div class="calendar-head">
-          <h3><span data-icon="calendar"></span> Campus Calendar</h3>
-          <button id="calToday" class="cal-link">Today</button>
+      <details class="panel calc-box">
+        <summary class="panel__head"><h2><span data-icon="calculator" aria-hidden="true"></span>Geometry calculator</h2><span class="icon" data-icon="chevrondown" aria-hidden="true"></span></summary>
+        <div class="panel__body">
+          <p class="calc-sub">Pick a shape and find its area and perimeter.</p>
+          <div id="calcShapes" class="calc-shapes" role="group" aria-label="Shape"></div>
+          <div id="calcPreview" class="calc-preview" aria-hidden="true"></div>
+          <div id="calcInputs" class="calc-inputs"></div>
+          <div class="calc-result" role="status" aria-live="polite">
+            <div><small>Area (A)</small><strong id="calcArea">-</strong></div>
+            <div><small id="calcPerimLabel">Perimeter (P)</small><strong id="calcPerim">-</strong></div>
+          </div>
+          <p id="calcFormula" class="calc-formula"></p>
+          <details class="calc-steps">
+            <summary>Show the steps</summary>
+            <div id="calcSteps"></div>
+          </details>
         </div>
-
-        <div class="calendar-nav">
-          <button id="calPrev" class="cal-arrow" aria-label="Previous month">‹</button>
-          <strong id="calendarTitle"></strong>
-          <button id="calNext" class="cal-arrow" aria-label="Next month">›</button>
-        </div>
-
-        <div class="calendar-weekdays">
-          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
-          <span>Thu</span><span>Fri</span><span>Sat</span>
-        </div>
-
-        <div id="calendarGrid" class="calendar-grid"></div>
-
-        <p id="calendarNote" class="calendar-note"></p>
-        <button id="calClear" class="cal-link" hidden>Show all dates</button>
-
-      </section>
-
-      <section class="calc-box nb-panel">
-        <h3><span data-icon="calculator"></span> Geometry Calculator</h3>
-        <p class="calc-sub">Pick a shape and find its area and perimeter.</p>
-
-        <div id="calcShapes" class="calc-shapes"></div>
-        <div id="calcPreview" class="calc-preview"></div>
-        <div id="calcInputs" class="calc-inputs"></div>
-
-        <div class="calc-result">
-          <div><small>Area (A)</small><strong id="calcArea">-</strong></div>
-          <div><small id="calcPerimLabel">Perimeter (P)</small><strong id="calcPerim">-</strong></div>
-        </div>
-        <p id="calcFormula" class="calc-formula"></p>
-
-        <details class="calc-steps">
-          <summary>Show the steps</summary>
-          <div id="calcSteps"></div>
-        </details>
-      </section>
+      </details>
     </aside>
 
   </div>
 
-  <div id="shapeStrip" class="shape-strip" aria-hidden="true"></div>
-
   <footer class="footer" id="about">
-    <strong>NEUCAST · University Information System</strong>
-    <em>"Godliness is the foundation of knowledge"</em>
+    <div>
+      <strong>NeuCast · University Information System</strong>
+      <em class="footer__quote">"Godliness is the foundation of knowledge"</em>
+    </div>
     <div class="footer-links">
-      <span>Privacy Policy</span>
-      <span>Terms of Service</span>
-      <span>Contact Us</span>
+      <button type="button" class="link-btn js-about">About NeuCast</button>
+      <button type="button" class="link-btn js-about">Offices and contact</button>
     </div>
   </footer>
 
-  <div id="shapeModal" class="modal nb-modal" hidden>
-    <div id="shapeBox" class="modal-content nb-modal__content shape-modal" role="dialog" aria-modal="true" aria-labelledby="shapeTitle">
-      <header class="sm-head">
-        <div class="sm-bar">
-          <button id="shapeBack" type="button" class="nb-btn nb-btn--sm sm-back"><span data-icon="arrowleft"></span> Back to shapes</button>
-          <button id="closeShape" type="button" class="close-btn" data-icon="close" aria-label="Close"></button>
-        </div>
-        <div class="sm-title">
-          <span id="shapeIcon" class="shape"></span>
-          <div>
-            <h2 id="shapeTitle"></h2>
-            <p id="shapeDesc" class="sm-desc"></p>
-          </div>
-          <div id="shapeCount" class="sm-count"></div>
-        </div>
-      </header>
-      <div id="shapeBody" class="sm-body"></div>
-      <footer id="shapeFoot" class="sm-foot">
-        <button id="shapeOpenAll" type="button" class="nb-btn nb-btn--ink nb-btn--block">Open full list with filters <span data-icon="arrowright"></span></button>
-      </footer>
-    </div>
-  </div>
-
-  <div id="modal" class="modal nb-modal" hidden>
-    <div class="modal-content nb-modal__content" role="dialog" aria-modal="true" aria-label="Announcement details">
-      <button id="closeModal" class="close-btn" data-icon="close" aria-label="Close"></button>
-      <span id="modalBadge" class="badge"></span>
-      <h2 id="modalTitle"></h2>
-      <p id="modalDate" class="modal-date"></p>
-      <p id="modalDetails" class="modal-details"></p>
-      <div id="ackBox" class="ack-box" hidden>
-        <button id="ackBtn" type="button" class="nb-hex" aria-pressed="false">
-          <span class="shape hexagon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
-          <span><span id="ackLabel">I have read this</span><small id="ackSub">The admin sees your confirmation</small></span>
-        </button>
-        <p id="ackNote">This is a critical notice. Please confirm once you have read it.</p>
+  <!-- Announcement details -->
+  <div id="modal" class="modal" hidden>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal__head">
+        <h2 id="modalTitle"></h2>
+        <button id="closeModal" type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="close"></span></button>
       </div>
-      <button id="askAbout" class="ask-btn nb-btn nb-btn--secondary"><span data-icon="help"></span> Ask a question about this</button>
+      <div class="modal__body">
+        <div class="modal__tags"><span id="modalBadge" class="tag"></span><span id="modalAudience" class="tag"></span></div>
+        <p id="modalDate" class="modal-date"></p>
+        <p id="modalDetails" class="modal-details"></p>
+        <div id="ackBox" class="ack" hidden>
+          <p id="ackNote"></p>
+          <button id="ackBtn" type="button" class="btn" aria-pressed="false"></button>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button id="askAbout" type="button" class="btn btn--secondary"><span data-icon="help"></span> Ask a question about this</button>
+        <button type="button" class="btn btn--ghost" data-close>Close</button>
+      </div>
     </div>
   </div>
 
-  <div id="aboutModal" class="modal nb-modal" hidden>
-    <div class="modal-content nb-modal__content about-content" role="dialog" aria-modal="true" aria-label="About NeuCast">
-      <button id="closeAbout" class="close-btn" data-icon="close" aria-label="Close"></button>
-      <div id="aboutBody"></div>
+  <!-- Needs you (recovery) -->
+  <div id="recoveryModal" class="modal" hidden>
+    <div class="modal__dialog wide" role="dialog" aria-modal="true" aria-labelledby="recoveryTitle">
+      <div class="modal__head">
+        <h2 id="recoveryTitle">Needs your attention</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="close"></span></button>
+      </div>
+      <div class="modal__body">
+        <p class="modal-intro">Announcements you may have missed: unread, waiting for your confirmation, edited since you read them, or already expired.</p>
+        <div id="recoveryTools" class="filter-row" role="group" aria-label="Show"></div>
+        <div id="recoveryList" class="recovery-list"></div>
+      </div>
     </div>
   </div>
 
-  <div id="settingsModal" class="modal nb-modal" hidden>
-    <div class="modal-content nb-modal__content" role="dialog" aria-modal="true" aria-label="Settings">
-      <button id="closeSettings" class="close-btn" data-icon="close" aria-label="Close"></button>
-      <h2>Settings</h2>
-
-      <label class="setting-row">
-        <span><span data-icon="moon"></span> Dark mode</span>
-        <input type="checkbox" id="darkToggle">
-      </label>
-
-      <label class="setting-row">
-        <span><span data-icon="textsize"></span> Text size</span>
-        <select id="textSizeSelect">
-          <option value="small">Small</option>
-          <option value="medium">Medium</option>
-          <option value="large">Large</option>
-        </select>
-      </label>
-
-      <label class="setting-row">
-        <span><span data-icon="checkcircle"></span> Hide announcements I've read</span>
-        <input type="checkbox" id="hideReadToggle">
-      </label>
+  <!-- About -->
+  <div id="aboutModal" class="modal" hidden>
+    <div class="modal__dialog wide" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+      <div class="modal__head">
+        <h2 id="aboutTitle">About NeuCast</h2>
+        <button id="closeAbout" type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="close"></span></button>
+      </div>
+      <div class="modal__body about" id="aboutBody"></div>
     </div>
   </div>
 
-  <div id="questionsModal" class="modal nb-modal" hidden>
-    <div class="modal-content nb-modal__content questions-content" role="dialog" aria-modal="true" aria-label="Questions">
-      <button id="closeQuestions" class="close-btn" data-icon="close" aria-label="Close"></button>
-      <h2>Questions</h2>
-      <p class="questions-intro">Need clarification about an announcement? Ask here and the admin will reply. Only you and the admin can see your questions.</p>
-
-      <form id="questionForm" class="question-form">
-        <label for="questionAbout">Related announcement (optional)</label>
-        <select id="questionAbout" class="nb-input"></select>
-
-        <label for="questionText">Your question</label>
-        <textarea id="questionText" class="nb-input" rows="4" maxlength="500" placeholder="Type your question here..."></textarea>
-
-        <p id="questionMessage" class="q-message" hidden></p>
-
-        <button type="submit" class="send-btn nb-btn nb-btn--accent nb-btn--block"><span data-icon="send"></span> Send Question</button>
+  <!-- Settings -->
+  <div id="settingsModal" class="modal" hidden>
+    <div class="modal__dialog narrow" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal__head">
+        <h2 id="settingsTitle">Settings</h2>
+        <button id="closeSettings" type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="close"></span></button>
+      </div>
+      <form class="modal__body settings" id="settingsForm" onsubmit="return false">
+        <fieldset class="setting">
+          <legend>Appearance</legend>
+          <div class="segmented">
+            <input type="radio" name="theme" id="themeSystem" value="system"><label for="themeSystem">System</label>
+            <input type="radio" name="theme" id="themeLight" value="light"><label for="themeLight">Light</label>
+            <input type="radio" name="theme" id="themeDark" value="dark"><label for="themeDark">Dark</label>
+          </div>
+        </fieldset>
+        <fieldset class="setting">
+          <legend>Text size</legend>
+          <div class="segmented">
+            <input type="radio" name="textsize" id="textSmall" value="small"><label for="textSmall">Small</label>
+            <input type="radio" name="textsize" id="textMedium" value="medium"><label for="textMedium">Medium</label>
+            <input type="radio" name="textsize" id="textLarge" value="large"><label for="textLarge">Large</label>
+          </div>
+        </fieldset>
+        <label class="setting setting--row" for="hideReadToggle">
+          <span><strong>Hide announcements I've read</strong><small>Keeps your list short. You can still find them in Needs you.</small></span>
+          <input type="checkbox" id="hideReadToggle" class="switch" role="switch">
+        </label>
       </form>
-
-      <h3>My questions</h3>
-      <div id="myQuestions"></div>
     </div>
   </div>
 
-  <script src="icons.js"></script>
-  <script src="cloud-config.js"></script>
-  <script src="cloud.js"></script>
-  <script src="data.js"></script>
-  <script src="script.js"></script>
-  <script src="calendar.js"></script>
+  <!-- Questions -->
+  <div id="questionsModal" class="modal" hidden>
+    <div class="modal__dialog wide" role="dialog" aria-modal="true" aria-labelledby="questionsTitle">
+      <div class="modal__head">
+        <h2 id="questionsTitle">Questions</h2>
+        <button id="closeQuestions" type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="close"></span></button>
+      </div>
+      <div class="modal__body">
+        <p class="modal-intro">Need clarification about an announcement? Ask here and the admin will reply. Only you and the admin can see your questions.</p>
+
+        <form id="questionForm" class="question-form" novalidate>
+          <div class="field">
+            <label for="questionAbout">Related announcement (optional)</label>
+            <select id="questionAbout" class="input"></select>
+          </div>
+          <div class="field">
+            <label for="questionText">Your question</label>
+            <textarea id="questionText" class="input" rows="4" maxlength="500" placeholder="Type your question here" aria-describedby="questionHint"></textarea>
+            <span id="questionHint" class="field__hint">At least 5 characters.</span>
+          </div>
+          <p id="questionMessage" class="login-message" role="status" hidden></p>
+          <button type="submit" class="btn btn--block"><span data-icon="send"></span> Send question</button>
+        </form>
+
+        <h3 class="modal-sub">My questions</h3>
+        <div id="myQuestions"></div>
+      </div>
+    </div>
+  </div>
+
+  <noscript><p class="noscript">NeuCast needs JavaScript to show your announcements. Please turn it on and reload.</p></noscript>
+
+  <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js script.js calendar.js calc.js"></script>
 </body>
 </html>
