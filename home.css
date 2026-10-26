@@ -273,6 +273,15 @@
     .rec-item { grid-template-columns: auto minmax(0, 1fr); }
     .rec-item__go { display: none; }
     .toasts { bottom: .75rem; }
+
+    /* Category and quick-filter chips: an even 2-column grid instead of
+       ragged flex-wrap, so every row lines up and no pill is left stranded. */
+    #categoryBar, .quick-filters-inner {
+        display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem;
+    }
+    #categoryBar .chip, .quick-filters-inner .chip { width: 100%; }
+    #categoryBar .chip__count, .quick-filters-inner .chip__count { margin-left: auto; }
+    #toggleQuickFilters { width: 100%; justify-content: center; }
 }
 
 /* Very small phones: the logo mark alone is enough; the four header buttons need the room */
