@@ -1,0 +1,44 @@
+/* =====================================================
+   NEUCAST FEATURE PAGES (shared)
+   Layout pieces shared by the four shape-function pages: archive.html,
+   feedback.html, careers.html, safety.html. Colors, type and controls still
+   come from tokens.css, base.css, skeleton.css and components.css; the
+   header, nav, filter rows and notice cards are shared with home.css.
+   ===================================================== */
+
+.feature-main {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 2rem var(--gutter) 3rem;
+    display: grid;
+    gap: 1.5rem;
+}
+
+/* A shape-tile banner that introduces the page and ties it to its category color */
+.feature-intro {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--r-lg);
+    background: var(--c-soft, var(--surface-2));
+    border: 1px solid var(--line);
+}
+.feature-intro .shape-tile { width: 3rem; height: 3rem; background: var(--surface); }
+.feature-intro .shape-tile .shape { --s: 1.5rem; }
+.feature-intro h1 { margin-bottom: .25rem; }
+.feature-intro p { color: var(--text-2); max-width: 62ch; }
+
+.feature-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .75rem; }
+
+/* Chronological / status badge used on archive and career cards */
+.chrono-badge {
+    display: inline-flex; align-items: center; gap: .375rem; padding: .125rem .625rem;
+    border-radius: var(--r-pill); background: var(--surface-2); color: var(--muted);
+    font-size: .75rem; font-weight: 600; white-space: nowrap;
+}
+.chrono-badge .icon { width: .875rem; height: .875rem; margin: 0; }
+
+@media (max-width: 40rem) {
+    .feature-intro { flex-direction: column; }
+}

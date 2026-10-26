@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#F5F6F8">
+  <title>Archive - NeuCast</title>
+  <script src="theme.js"></script>
+  <script src="animations.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="skeleton.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="feature.css">
+  <link rel="stylesheet" href="archive.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+
+<body id="top">
+  <a class="skip-link" href="#archiveList">Skip to the archive</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="index.html#top" class="brand" aria-label="NeuCast home">
+        <span class="brand-mark" data-icon="neucast"></span>
+        <span class="brand-text">
+          <span class="brand-name">NeuCast</span>
+          <span class="brand-sub">University Information System</span>
+        </span>
+      </a>
+
+      <nav id="mainNav" class="topnav" aria-label="Main">
+        <a href="index.html#announcements" class="nav-link">Announcements</a>
+        <a href="archive.html" class="nav-link" aria-current="page">Archive</a>
+        <a href="feedback.html" class="nav-link">Feedback</a>
+      </nav>
+
+      <div class="top-right">
+        <a href="index.html#top" id="userLink" class="user">
+          <span class="avatar" data-icon="user" aria-hidden="true"></span>
+          <span class="user-text"><strong id="userName">Hello</strong><small id="userSub"></small></span>
+        </a>
+        <button type="button" id="menuBtn" class="icon-btn menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="mainNav"><span data-icon="menu"></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="main feature-main" tabindex="-1">
+
+    <section class="feature-intro c-general" aria-labelledby="archiveTitle">
+      <span class="shape-tile lg"><span class="shape rectangle" aria-hidden="true"></span></span>
+      <div>
+        <h1 id="archiveTitle">Announcement History &amp; Archive</h1>
+        <p>Look up expired, read, or past notices by date and scope. Nothing here clutters your active feed &mdash; it is kept for the record.</p>
+      </div>
+    </section>
+
+    <form id="archiveFilters" class="filters feature-filters" role="search" aria-label="Filter the archive">
+      <div class="field">
+        <label for="archiveSearch">Search</label>
+        <input type="search" id="archiveSearch" class="input" placeholder="Search by title or detail" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="archiveScope">Scope</label>
+        <select id="archiveScope" class="input">
+          <option value="all">All announcements</option>
+          <option value="all-students">University-wide only</option>
+          <option value="mine">My course only</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="archiveRange">Date range</label>
+        <select id="archiveRange" class="input">
+          <option value="all">All time</option>
+          <option value="30">Last 30 days</option>
+          <option value="90">Last 3 months</option>
+          <option value="365">Last 12 months</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="archiveCategory">Category</label>
+        <select id="archiveCategory" class="input">
+          <option value="all">Every category</option>
+        </select>
+      </div>
+    </form>
+
+    <div id="archiveTools" class="filter-row" role="group" aria-label="Status"></div>
+
+    <p id="archiveCount" class="result-count" role="status" aria-live="polite"></p>
+
+    <div id="archiveList" class="notices archive-grid" aria-busy="true">
+      <div class="sk-group" data-skeleton>
+        <div class="sk-notice" aria-hidden="true"><span class="sk sk-tile"></span><div><div class="sk-notice__meta"><span class="sk" style="width:5.5rem"></span><span class="sk" style="width:3.5rem"></span></div><span class="sk sk-line lg w-80"></span><span class="sk sk-line w-100"></span><span class="sk sk-line w-60"></span></div></div>
+        <div class="sk-notice" aria-hidden="true"><span class="sk sk-tile"></span><div><div class="sk-notice__meta"><span class="sk" style="width:5.5rem"></span><span class="sk" style="width:3.5rem"></span></div><span class="sk sk-line lg w-60"></span><span class="sk sk-line w-100"></span><span class="sk sk-line w-80"></span></div></div>
+        <span class="sk-status">Loading archive...</span>
+      </div>
+    </div>
+
+    <div id="archiveEmpty" class="empty" hidden>
+      <span class="shape-tile lg"><span class="shape rectangle" aria-hidden="true"></span></span>
+      <h3>Nothing matches yet</h3>
+      <p>Try widening the date range or clearing a filter.</p>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div>
+      <strong>NeuCast · University Information System</strong>
+      <em class="footer__quote">"Godliness is the foundation of knowledge"</em>
+    </div>
+    <div class="footer-links">
+      <a class="link-btn" href="index.html#about">About NeuCast</a>
+    </div>
+  </footer>
+
+  <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js feature-nav.js archive.js"></script>
+</body>
+</html>

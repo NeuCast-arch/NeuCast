@@ -146,6 +146,16 @@ const CATEGORIES = {
         name: "Important", shape: "octagon", desc: "Guidelines, Policy Updates, Pinned Notices",
         area: "A = 2(1 + √2) × s²", perimeterLabel: "Perimeter", perimeter: "P = 8s",
         use: "Used for important or pinned notices administrators want to keep visible, such as official guidelines and policy updates."
+    },
+    careers: {
+        name: "Careers & OJT", shape: "trapezoid", desc: "Internships, Job Fairs, Org Bulletins",
+        area: "A = ½(a + b) × h", perimeterLabel: "Perimeter", perimeter: "P = a + b + c + d",
+        use: "Used for internship/OJT postings, career talks, job fairs, and Student Affairs org bulletins. See the Careers & OJT page."
+    },
+    safety: {
+        name: "Health & Safety", shape: "parallelogram", desc: "Hazards, Closures, Clinic Advisories",
+        area: "A = b × h", perimeterLabel: "Perimeter", perimeter: "P = 2(a + b)",
+        use: "Used for hazard warnings, facility closures, and health/clinic advisories. See the Health & Safety page."
     }
 };
 
@@ -573,4 +583,80 @@ function isExpired(item) {
     if (!item.expires) return false;
     const end = new Date(item.expires + "T23:59:59");
     return !isNaN(end) && end < new Date();
+}
+
+// ----- Feedback: star ratings, suggestions, and bug reports (Pentagon) -----
+const FEEDBACK_KEY = "neucast_feedback";
+const loadFeedback = () => readJSON(FEEDBACK_KEY, []);
+const saveFeedback = list => localStorage.setItem(FEEDBACK_KEY, JSON.stringify(list));
+
+// kind: "rating" | "suggestion" | "bug"
+function addFeedback(student, kind, text, rating) {
+    const list = loadFeedback();
+
+    let biggestId = 0;
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].id > biggestId) biggestId = list[i].id;
+    }
+
+    const entry = {
+        id: biggestId + 1,
+        studentId: student.id,
+        studentName: student.name,
+        course: student.course,
+        kind: kind,
+        rating: rating || null,
+        text: text || "",
+        date: todayText(),
+        status: "open"   // "open" or "resolved" (set by an admin)
+    };
+
+    list.unshift(entry);
+    saveFeedback(list);
+    return entry;
+}
+
+function setFeedbackStatus(id, status) {
+    const list = loadFeedback();
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].id === id) list[i].status = status;
+    }
+    saveFeedback(list);
+}
+
+function deleteFeedback(id) {
+    saveFeedback(loadFeedback().filter(f => f.id !== id));
+}
+
+// Average of every numeric rating on file (null when there are none yet)
+function averageRating() {
+    const ratings = loadFeedback().filter(f => typeof f.rating === "number");
+    if (ratings.length === 0) return null;
+    const total = ratings.reduce((sum, f) => sum + f.rating, 0);
+    return total / ratings.length;
+}
+
+// ----- Saved opportunities: a student's own bookmarked Careers & OJT listings (Trapezoid) -----
+const SAVED_KEY_PREFIX = "neucast_saved_";
+const loadSavedIds = studentId => readJSON(SAVED_KEY_PREFIX + studentId, []);
+
+function toggleSaved(studentId, announcementId) {
+    const saved = loadSavedIds(studentId);
+    const at = saved.indexOf(announcementId);
+    if (at >= 0) saved.splice(at, 1);
+    else saved.push(announcementId);
+    localStorage.setItem(SAVED_KEY_PREFIX + studentId, JSON.stringify(saved));
+    return at < 0; // true = now saved, false = now removed
+}
+
+// ----- Applications: a student's own "Apply Now" clicks on Careers & OJT listings -----
+const APPLIED_KEY_PREFIX = "neucast_applied_";
+const loadAppliedIds = studentId => readJSON(APPLIED_KEY_PREFIX + studentId, []);
+
+function markApplied(studentId, announcementId) {
+    const applied = loadAppliedIds(studentId);
+    if (applied.indexOf(announcementId) < 0) {
+        applied.push(announcementId);
+        localStorage.setItem(APPLIED_KEY_PREFIX + studentId, JSON.stringify(applied));
+    }
 }

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#F5F6F8">
+  <title>Careers &amp; OJT - NeuCast</title>
+  <script src="theme.js"></script>
+  <script src="animations.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="skeleton.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="feature.css">
+  <link rel="stylesheet" href="careers.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+
+<body id="top">
+  <a class="skip-link" href="#careersList">Skip to listings</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="index.html#top" class="brand" aria-label="NeuCast home">
+        <span class="brand-mark" data-icon="neucast"></span>
+        <span class="brand-text">
+          <span class="brand-name">NeuCast</span>
+          <span class="brand-sub">University Information System</span>
+        </span>
+      </a>
+
+      <nav id="mainNav" class="topnav" aria-label="Main">
+        <a href="index.html#announcements" class="nav-link">Announcements</a>
+        <a href="archive.html" class="nav-link">Archive</a>
+        <a href="feedback.html" class="nav-link">Feedback</a>
+      </nav>
+
+      <div class="top-right">
+        <a href="index.html#top" id="userLink" class="user">
+          <span class="avatar" data-icon="user" aria-hidden="true"></span>
+          <span class="user-text"><strong id="userName">Hello</strong><small id="userSub"></small></span>
+        </a>
+        <button type="button" id="menuBtn" class="icon-btn menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="mainNav"><span data-icon="menu"></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="main feature-main" tabindex="-1">
+
+    <section class="feature-intro c-careers" aria-labelledby="careersTitle">
+      <span class="shape-tile lg"><span class="shape trapezoid" aria-hidden="true"></span></span>
+      <div>
+        <h1 id="careersTitle">Student Organizations, Careers &amp; OJT Hub</h1>
+        <p>Internship and OJT postings, career talks, job fairs, and Student Affairs org bulletins, all in one place.</p>
+      </div>
+    </section>
+
+    <form id="careersFilters" class="filters feature-filters" role="search" aria-label="Filter listings">
+      <div class="field">
+        <label for="careersSearch">Search</label>
+        <input type="search" id="careersSearch" class="input" placeholder="Search by title or detail" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="careersProgram">Program / department</label>
+        <select id="careersProgram" class="input">
+          <option value="all">Every program</option>
+          <option value="all-students">University-wide</option>
+        </select>
+      </div>
+    </form>
+
+    <div id="careersTools" class="filter-row" role="group" aria-label="Show"></div>
+
+    <p id="careersCount" class="result-count" role="status" aria-live="polite"></p>
+
+    <div id="careersList" class="notices careers-grid" aria-busy="true">
+      <div class="sk-group" data-skeleton>
+        <div class="sk-notice" aria-hidden="true"><span class="sk sk-tile"></span><div><div class="sk-notice__meta"><span class="sk" style="width:5.5rem"></span><span class="sk" style="width:3.5rem"></span></div><span class="sk sk-line lg w-80"></span><span class="sk sk-line w-100"></span><span class="sk sk-line w-60"></span></div></div>
+        <span class="sk-status">Loading listings...</span>
+      </div>
+    </div>
+
+    <div id="careersEmpty" class="empty" hidden>
+      <span class="shape-tile lg c-careers"><span class="shape trapezoid" aria-hidden="true"></span></span>
+      <h3>No listings right now</h3>
+      <p>Check back soon, or widen your filters.</p>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div>
+      <strong>NeuCast · University Information System</strong>
+      <em class="footer__quote">"Godliness is the foundation of knowledge"</em>
+    </div>
+    <div class="footer-links">
+      <a class="link-btn" href="index.html#about">About NeuCast</a>
+    </div>
+  </footer>
+
+  <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js feature-nav.js careers.js"></script>
+</body>
+</html>

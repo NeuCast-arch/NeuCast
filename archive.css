@@ -1,0 +1,24 @@
+/* =====================================================
+   ARCHIVE PAGE (Rectangle: Announcement History & Archive Engine)
+   Layout only; shares .notices / .notice with home.css.
+   ===================================================== */
+
+.archive-grid .notice { cursor: default; }
+.archive-grid .notice[open] summary { margin-bottom: .5rem; }
+
+.archive-card__details {
+    margin-top: .5rem;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+}
+.archive-card__details summary {
+    list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: .375rem;
+    padding: .5rem .625rem; border-radius: var(--r-sm); color: var(--link); font-size: .875rem; font-weight: 600;
+}
+.archive-card__details summary::-webkit-details-marker { display: none; }
+.archive-card__details summary:hover { background: var(--surface); text-decoration: underline; }
+.archive-card__details[open] summary .icon { transform: rotate(180deg); }
+.archive-card__body { padding: 0 .625rem .75rem; color: var(--text-2); font-size: .9375rem; }
+.archive-card__body p + p { margin-top: .5rem; }
+
+.archive-card__foot { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .25rem; }

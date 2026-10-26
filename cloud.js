@@ -28,11 +28,13 @@
     var pending = 0;       // uploads still in flight
     var applying = false;  // true while WE write into localStorage (so we do not upload it back)
 
-    var LOCALKEY = { students: "neucast_students", questions: "neucast_questions", acks: "neucast_acks" };
+    var LOCALKEY = { students: "neucast_students", questions: "neucast_questions", acks: "neucast_acks", feedback: "neucast_feedback" };
     var SORT = {
         students:  function (a, b) { return (a.createdAt || 0) - (b.createdAt || 0); },
-        questions: function (a, b) { return (Number(a.id) || 0) - (Number(b.id) || 0); }
+        questions: function (a, b) { return (Number(a.id) || 0) - (Number(b.id) || 0); },
+        feedback:  function (a, b) { return (Number(a.id) || 0) - (Number(b.id) || 0); }
     };
+    snap.feedback = {};
 
     // ----- small helpers -----
     // Database keys may not contain . $ # [ ] /
@@ -51,8 +53,10 @@
     function kind(key) {
         if (key === "neucast_students") return "students";
         if (key === "neucast_questions") return "questions";
+        if (key === "neucast_feedback") return "feedback";
         if (key === "neucast_acks") return "acks";
-        if (key === "neucast_announcements" || key.indexOf("neucast_read_") === 0 || key.indexOf("neucast_readver_") === 0) return "kv";
+        if (key === "neucast_announcements" || key.indexOf("neucast_read_") === 0 || key.indexOf("neucast_readver_") === 0 ||
+            key.indexOf("neucast_saved_") === 0 || key.indexOf("neucast_applied_") === 0) return "kv";
         return null;
     }
     function readLocal(key, fallback) {
@@ -116,7 +120,7 @@
         var changed = false;
         var firstRun = !(db.meta && db.meta.initialized);   // nobody has used this database yet
 
-        ["students", "questions"].forEach(function (kd) {
+        ["students", "questions", "feedback"].forEach(function (kd) {
             var map = db[kd] || {};
             var list = Object.keys(map).map(function (k) { return map[k]; }).filter(Boolean);
             var now = {};

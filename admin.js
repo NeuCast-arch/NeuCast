@@ -102,6 +102,17 @@ const CHART_SHAPES = {
             return { w: w, h: w, value: s };
         },
         rule: "s = √(A ÷ 2(1 + √2))"
+    },
+    // Trapezoid and parallelogram are also category shapes here (Careers & OJT, Health & Safety),
+    // on top of being two of the geometry calculator's own shapes.
+    trapezoid: {
+        // Isosceles trapezoid, top = 60% of the bottom, height = bottom: A = 0.8b²
+        size: a => { const b = Math.sqrt(a / 0.8); return { w: b, h: b, value: b }; },
+        rule: "b = √(A ÷ 0.8)"
+    },
+    parallelogram: {
+        size: a => { const s = Math.sqrt(a); return { w: s, h: s, value: s }; },
+        rule: "s = √A"
     }
 };
 
@@ -410,6 +421,7 @@ const audienceInput = document.getElementById("audienceInput");
 const detailsInput = document.getElementById("detailsInput");
 const pinInput = document.getElementById("pinInput");
 const ackInput = document.getElementById("ackInput");
+const applyUrlInput = document.getElementById("applyUrlInput");
 const expiresInput = document.getElementById("expiresInput");
 const formMessage = document.getElementById("formMessage");
 
@@ -444,6 +456,7 @@ function openForm(item, trigger) {
         detailsInput.value = item.details;
         pinInput.checked = item.pinned === true;
         ackInput.checked = needsAck(item);
+        applyUrlInput.value = item.applyUrl || "";
         expiresInput.value = item.expires || "";
     } else {
         editingId = null;
@@ -525,6 +538,7 @@ announcementForm.addEventListener("submit", function (event) {
                 announcements[i].details = details;
                 announcements[i].pinned = pinInput.checked;
                 announcements[i].requireAck = ackInput.checked;
+                announcements[i].applyUrl = applyUrlInput.value.trim();
                 announcements[i].expires = expiresInput.value;
                 announcements[i].updatedAt = Date.now();   // students see "edited since you read it"
             }
@@ -551,6 +565,7 @@ announcementForm.addEventListener("submit", function (event) {
             details: details,
             pinned: pinInput.checked,
             requireAck: ackInput.checked,
+            applyUrl: applyUrlInput.value.trim(),
             expires: expiresInput.value,
             date: today
         });
@@ -686,6 +701,99 @@ questionList.addEventListener("click", async function (event) {
     }
 });
 
+// ===== 9b. Feedback tab (Pentagon: ratings, suggestions, bug reports) =====
+const feedbackList = document.getElementById("feedbackList");
+const feedbackFilter = document.getElementById("feedbackFilter");
+const feedbackAverage = document.getElementById("feedbackAverage");
+let feedbackItems = loadFeedback();
+
+function updateFeedbackBadge() {
+    const open = feedbackItems.filter(function (f) { return f.kind !== "rating" && f.status !== "resolved"; }).length;
+    const badge = document.getElementById("feedbackBadge");
+    badge.textContent = open;
+    badge.hidden = open === 0;
+}
+
+function kindLabel(kind) {
+    if (kind === "bug") return "Bug report";
+    if (kind === "rating") return "Rating";
+    return "Suggestion";
+}
+
+function renderFeedback() {
+    updateFeedbackBadge();
+
+    const avg = averageRating();
+    const ratingCount = feedbackItems.filter(function (f) { return f.kind === "rating"; }).length;
+    feedbackAverage.textContent = avg === null ? "No ratings yet" :
+        avg.toFixed(1) + " / 5 average (" + ratingCount + (ratingCount === 1 ? " rating)" : " ratings)");
+
+    const filter = feedbackFilter.value;
+    const items = feedbackItems.filter(function (f) { return f.kind !== "rating"; });
+    let html = "";
+    let shown = 0;
+
+    for (let i = 0; i < items.length; i++) {
+        const f = items[i];
+        const resolved = f.status === "resolved";
+
+        if (filter === "open" && resolved) continue;
+        if (filter === "resolved" && !resolved) continue;
+        if ((filter === "suggestion" || filter === "bug") && f.kind !== filter) continue;
+
+        shown++;
+
+        html += '<article class="question-item"><div class="q-top">' +
+            '<span class="tag' + (f.kind === "bug" ? " tag--danger" : " tag--info") + '">' + kindLabel(f.kind) + "</span>" +
+            '<span class="tag' + (resolved ? " tag--success" : " tag--warning") + '">' + (resolved ? icon("checkcircle") + "Resolved" : icon("clock") + "Open") + "</span>" +
+            '<span class="q-date">' + escapeHtml(f.date) + "</span></div>" +
+            '<p class="q-from"><strong>' + escapeHtml(f.studentName) + "</strong> · " + escapeHtml(f.studentId) + " · " + escapeHtml(f.course) + "</p>" +
+            '<p class="q-text">' + escapeHtml(f.text) + '</p>' +
+            '<div class="q-actions">' +
+            '<button type="button" class="btn btn--sm resolve-btn" data-id="' + f.id + '">' + (resolved ? "Mark open" : "Mark resolved") + "</button>" +
+            '<button type="button" class="btn btn--danger btn--sm delete-feedback-btn" data-id="' + f.id + '">' + icon("trash") + "Delete</button></div></article>";
+    }
+
+    keepFocus(feedbackList, function () { feedbackList.innerHTML = html; });
+
+    const noFeedbackItems = document.getElementById("noFeedbackItems");
+    noFeedbackItems.textContent = items.length === 0 ? "No feedback yet." : "Nothing matches this filter.";
+    noFeedbackItems.hidden = shown > 0;
+    document.getElementById("feedbackResultText").textContent =
+        items.length === 0 ? "" : "Showing " + shown + " of " + items.length + (items.length === 1 ? " submission" : " submissions");
+}
+
+feedbackFilter.addEventListener("change", renderFeedback);
+
+feedbackList.addEventListener("click", async function (event) {
+    const button = event.target.closest("button");
+    if (!button) return;
+    const id = Number(button.dataset.id);
+
+    if (button.classList.contains("resolve-btn")) {
+        const current = feedbackItems.find(function (f) { return f.id === id; });
+        if (!current) return;
+        setFeedbackStatus(id, current.status === "resolved" ? "open" : "resolved");
+        feedbackItems = loadFeedback();
+        renderFeedback();
+        NeuUI.toast("Updated", "success");
+    }
+
+    if (button.classList.contains("delete-feedback-btn")) {
+        const yes = await NeuUI.confirm({
+            title: "Delete this submission?",
+            message: "This cannot be undone.",
+            confirmText: "Delete", danger: true
+        });
+        if (!yes) return;
+        deleteFeedback(id);
+        feedbackItems = loadFeedback();
+        renderFeedback();
+        NeuUI.toast("Submission deleted", "success");
+        feedbackFilter.focus();
+    }
+});
+
 // ===== Sync: new data from another tab or device =====
 // True while the admin is writing a reply that is not saved yet: redrawing would wipe it.
 function replyInProgress() {
@@ -702,10 +810,12 @@ function refreshFromStorage() {
     announcements = sortPinnedFirst(loadAnnouncements());
     students = loadStudents();
     questions = loadQuestions();
+    feedbackItems = loadFeedback();
     renderDashboard();
     renderStudents();
     if (replyInProgress()) updateQuestionBadge();
     else renderQuestions();
+    renderFeedback();
 }
 
 window.addEventListener("storage", refreshFromStorage);
@@ -715,8 +825,11 @@ window.addEventListener("neucast:synced", refreshFromStorage);
 renderDashboard();
 renderStudents();
 renderQuestions();
+renderFeedback();
 
-// The homepage sends the admin here with #questions in the address
+// The homepage sends the admin here with #questions (or #feedback) in the address
 if (window.location.hash === "#questions") {
     selectTab(document.getElementById("tab-questions"), false);
+} else if (window.location.hash === "#feedback") {
+    selectTab(document.getElementById("tab-feedback"), false);
 }

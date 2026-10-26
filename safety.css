@@ -1,0 +1,21 @@
+/* =====================================================
+   HEALTH & SAFETY PAGE (Parallelogram: Health & Campus Safety Protocol)
+   ===================================================== */
+
+/* The angled slant lives on a decorative edge strip only; the card body
+   stays an unskewed rectangle so the text underneath is never distorted. */
+.safety-card { position: relative; border-width: 1px; overflow: hidden; }
+.safety-card::before {
+    content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 6px;
+    background: var(--c); clip-path: polygon(0 0, 100% 0, 40% 100%, 0 100%);
+}
+.safety-card.is-priority {
+    border-color: var(--c);
+    box-shadow: 0 0 0 1px var(--c);
+}
+.safety-card.is-priority::before { width: 8px; }
+@media (prefers-reduced-motion: no-preference) {
+    .safety-card.is-priority .shape-tile { animation: nc-pulse 2.4s ease-out infinite; }
+}
+
+.safety-card .notice__meta .tag--danger { font-weight: 700; }

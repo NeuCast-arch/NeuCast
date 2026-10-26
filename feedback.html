@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#F5F6F8">
+  <title>Feedback - NeuCast</title>
+  <script src="theme.js"></script>
+  <script src="animations.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="skeleton.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="feature.css">
+  <link rel="stylesheet" href="feedback.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+
+<body id="top">
+  <a class="skip-link" href="#feedbackForm">Skip to the feedback form</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="index.html#top" class="brand" aria-label="NeuCast home">
+        <span class="brand-mark" data-icon="neucast"></span>
+        <span class="brand-text">
+          <span class="brand-name">NeuCast</span>
+          <span class="brand-sub">University Information System</span>
+        </span>
+      </a>
+
+      <nav id="mainNav" class="topnav" aria-label="Main">
+        <a href="index.html#announcements" class="nav-link">Announcements</a>
+        <a href="archive.html" class="nav-link">Archive</a>
+        <a href="feedback.html" class="nav-link" aria-current="page">Feedback</a>
+      </nav>
+
+      <div class="top-right">
+        <a href="index.html#top" id="userLink" class="user">
+          <span class="avatar" data-icon="user" aria-hidden="true"></span>
+          <span class="user-text"><strong id="userName">Hello</strong><small id="userSub"></small></span>
+        </a>
+        <button type="button" id="menuBtn" class="icon-btn menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="mainNav"><span data-icon="menu"></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="main feature-main" tabindex="-1">
+
+    <section class="feature-intro c-feedback" aria-labelledby="feedbackTitle">
+      <span class="shape-tile lg"><span class="shape pentagon" aria-hidden="true"></span></span>
+      <div>
+        <h1 id="feedbackTitle">Student Feedback &amp; Incident Reports</h1>
+        <p>Rate NeuCast, suggest an improvement, or report a bug. For a question about one specific announcement, use the <strong>Questions</strong> button on the homepage instead.</p>
+      </div>
+    </section>
+
+    <section class="panel rating-panel" aria-labelledby="ratingHeading">
+      <div class="panel__head"><h2 id="ratingHeading"><span data-icon="pin" aria-hidden="true"></span>How is NeuCast working for you?</h2></div>
+      <div class="panel__body">
+        <p id="ratingAverage" class="rating-average"></p>
+        <div id="pentagonRating" class="pentagon-rating" role="radiogroup" aria-label="Rate NeuCast from 1 to 5"></div>
+        <p id="ratingMessage" class="login-message success" role="status" hidden></p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="formHeading">
+      <div class="panel__head"><h2 id="formHeading"><span data-icon="edit" aria-hidden="true"></span>Send a suggestion or report a bug</h2></div>
+      <div class="panel__body">
+        <form id="feedbackForm" class="feedback-form" novalidate>
+          <div class="field">
+            <span class="field__label" id="kindLabel">What is this about?</span>
+            <div class="segmented" role="radiogroup" aria-labelledby="kindLabel">
+              <input type="radio" name="kind" id="kindSuggestion" value="suggestion" checked><label for="kindSuggestion">Suggestion</label>
+              <input type="radio" name="kind" id="kindBug" value="bug"><label for="kindBug">Bug report</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="feedbackText" id="feedbackTextLabel">Your message</label>
+            <textarea id="feedbackText" class="input" rows="5" maxlength="600" placeholder="Tell us what happened, or what you'd like to see" aria-describedby="feedbackHint"></textarea>
+            <span id="feedbackHint" class="field__hint">At least 10 characters.</span>
+          </div>
+          <p id="feedbackMessage" class="login-message error" role="alert" hidden></p>
+          <button type="submit" class="btn btn--block"><span data-icon="send"></span> Send feedback</button>
+        </form>
+      </div>
+    </section>
+
+    <section aria-labelledby="myFeedbackHeading">
+      <h2 id="myFeedbackHeading">My submissions</h2>
+      <div id="myFeedback" class="admin-list feedback-list"></div>
+      <p id="noFeedback" class="empty" hidden></p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div>
+      <strong>NeuCast · University Information System</strong>
+      <em class="footer__quote">"Godliness is the foundation of knowledge"</em>
+    </div>
+    <div class="footer-links">
+      <a class="link-btn" href="index.html#about">About NeuCast</a>
+    </div>
+  </footer>
+
+  <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js feature-nav.js feedback.js"></script>
+</body>
+</html>

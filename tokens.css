@@ -50,6 +50,8 @@
     --cat-general:  #3E6A7E; --cat-general-soft:  #E8F0F3; --cat-general-ink:  #2F566A;
     --cat-deadlines: #B9540B; --cat-deadlines-soft: #FCEEDF; --cat-deadlines-ink: #8A3F08;
     --cat-important: #7A5B00; --cat-important-soft: #F5EFD6; --cat-important-ink: #5C4500;
+    --cat-careers: #0E7C66; --cat-careers-soft: #E3F5F0; --cat-careers-ink: #0B5F4F;
+    --cat-safety:  #B3261E; --cat-safety-soft:  #FDECEA; --cat-safety-ink:  #8E1D17;
 
     /* --- Shape, spacing, elevation --- */
     --r-sm: 8px;
@@ -112,6 +114,8 @@
     --cat-general:  #8FBACB; --cat-general-soft:  #1F313A; --cat-general-ink:  #B5D3DF;
     --cat-deadlines: #F2A94E; --cat-deadlines-soft: #3A2A12; --cat-deadlines-ink: #F7C684;
     --cat-important: #D8C457; --cat-important-soft: #332E0F; --cat-important-ink: #E8D685;
+    --cat-careers: #5FD9BE; --cat-careers-soft: #10332B; --cat-careers-ink: #9BEBD8;
+    --cat-safety:  #FF8A80; --cat-safety-soft:  #3B1F22; --cat-safety-ink:  #FFB4AE;
 
     --shadow-pop: 0 12px 36px rgba(0, 0, 0, .5), 0 1px 3px rgba(0, 0, 0, .4);
     --scrim: rgba(4, 6, 10, .66);
@@ -128,6 +132,10 @@ html[data-text="large"] { font-size: 112.5%; }
 .c-general  { --c: var(--cat-general);  --c-soft: var(--cat-general-soft);  --c-ink: var(--cat-general-ink); }
 .c-deadlines { --c: var(--cat-deadlines); --c-soft: var(--cat-deadlines-soft); --c-ink: var(--cat-deadlines-ink); }
 .c-important { --c: var(--cat-important); --c-soft: var(--cat-important-soft); --c-ink: var(--cat-important-ink); }
+.c-careers   { --c: var(--cat-careers);   --c-soft: var(--cat-careers-soft);   --c-ink: var(--cat-careers-ink); }
+.c-safety    { --c: var(--cat-safety);    --c-soft: var(--cat-safety-soft);    --c-ink: var(--cat-safety-ink); }
 
-/* Calculator-only shapes are not categories, so they stay neutral */
+/* Calculator-only shapes (in the geometry calculator widget) stay neutral regardless of
+   whether that same shape is also used, elsewhere, as a category identity (trapezoid = Careers,
+   parallelogram = Safety): the calculator is a general math tool, not a category view. */
 .k-rectangle, .k-parallelogram, .k-trapezoid, .k-pentagon { --c: var(--text-2); --c-soft: var(--surface-2); --c-ink: var(--text); }

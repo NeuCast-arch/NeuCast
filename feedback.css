@@ -1,0 +1,40 @@
+/* =====================================================
+   FEEDBACK PAGE (Pentagon: Student Feedback & Incident Reports)
+   ===================================================== */
+
+:root {
+    --cat-feedback: #7C3AED; --cat-feedback-soft: #F1EBFE; --cat-feedback-ink: #5B21B6;
+}
+:root[data-theme="dark"] {
+    --cat-feedback: #C4B5FD; --cat-feedback-soft: #2C2250; --cat-feedback-ink: #DDD3FE;
+}
+.c-feedback { --c: var(--cat-feedback); --c-soft: var(--cat-feedback-soft); --c-ink: var(--cat-feedback-ink); }
+
+.rating-average { margin-bottom: .75rem; color: var(--text-2); font-size: .9375rem; }
+.rating-average strong { color: var(--text); font-size: 1.125rem; }
+
+/* Five pentagons stand in for stars: each lights up on hover/click, per the spec's
+   "dynamic star illumination" — drawn as the module's own shape, not a generic star. */
+.pentagon-rating { display: flex; gap: .5rem; }
+.pentagon-rating button {
+    display: grid; place-items: center; width: 3rem; height: 3rem; padding: 0;
+    border: 0; border-radius: var(--r-sm); background: transparent; cursor: pointer;
+    transition: transform var(--dur-1) var(--ease);
+}
+.pentagon-rating button:hover, .pentagon-rating button:focus-visible { transform: scale(1.12); }
+.pentagon-rating .shape { --s: 2rem; --c: var(--surface-2); background: var(--c); transition: background-color var(--dur-1) linear; }
+.pentagon-rating button.is-lit .shape, .pentagon-rating button:hover .shape, .pentagon-rating button:focus-visible .shape { --c: var(--cat-feedback); }
+.pentagon-rating button[disabled] { cursor: not-allowed; }
+.pentagon-rating button[disabled]:hover { transform: none; }
+
+.feedback-form { display: grid; gap: 1rem; }
+
+.feedback-list { gap: .75rem; }
+.feedback-item {
+    display: grid; gap: .5rem; padding: 1rem 1.125rem;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+}
+.feedback-item__top { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.feedback-item__stars { display: inline-flex; gap: .125rem; }
+.feedback-item__stars .shape { --s: .875rem; --c: var(--cat-feedback); }
+.feedback-item p { color: var(--text-2); font-size: .9375rem; }

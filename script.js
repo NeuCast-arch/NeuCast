@@ -169,8 +169,7 @@ function renderFilters() {
         chips += '<button type="button" class="chip" data-smart="' + f.name + '" aria-pressed="' + (f.name === activeSmart) + '">' + f.label +
             '<span class="chip__count">' + countSmart(f.name) + "</span></button>";
     }
-    const quick = '<span class="filter-label">Show</span>' +
-        '<button type="button" class="chip chip--toggle" id="toggleQuickFilters" aria-pressed="' + quickFiltersHidden + '">' +
+    const quick = '<button type="button" class="chip chip--toggle" id="toggleQuickFilters" aria-pressed="' + quickFiltersHidden + '">' +
         (quickFiltersHidden ? "Show" : "Unshow") + "</button>" +
         '<div class="quick-filters-collapse' + (quickFiltersHidden ? " is-hidden" : "") + '" id="quickFiltersCollapse">' +
         '<div class="quick-filters-inner">' + chips + "</div></div>";

@@ -1,0 +1,18 @@
+/* =====================================================
+   CAREERS & OJT PAGE (Trapezoid: Student Orgs, Careers & OJT Hub)
+   ===================================================== */
+
+.careers-grid .notice { padding-bottom: 1rem; }
+
+/* Angled ribbon badge: the trapezoid clip-path lives here (decoration only),
+   so the card body underneath stays a plain readable rectangle. */
+.track-ribbon {
+    display: inline-flex; align-items: center; gap: .375rem;
+    padding: .25rem .875rem .25rem .625rem;
+    background: var(--c-soft); color: var(--c-ink);
+    font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .02em;
+    clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+}
+
+.careers-card__actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+.careers-card__actions .btn[aria-pressed="true"] { background: var(--success-soft); color: var(--success-ink); border-color: var(--success); }

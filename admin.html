@@ -76,6 +76,7 @@
                     <button class="tab-btn" role="tab" id="tab-announcements" type="button" data-tab="announcementsTab" aria-controls="announcementsTab" aria-selected="true" tabindex="0"><span data-icon="megaphone"></span> Announcements</button>
                     <button class="tab-btn" role="tab" id="tab-students" type="button" data-tab="studentsTab" aria-controls="studentsTab" aria-selected="false" tabindex="-1"><span data-icon="cap"></span> Students <span id="pendingBadge" class="tag tag--warning" hidden>0</span></button>
                     <button class="tab-btn" role="tab" id="tab-questions" type="button" data-tab="questionsTab" aria-controls="questionsTab" aria-selected="false" tabindex="-1"><span data-icon="help"></span> Questions <span id="questionBadge" class="tag tag--warning" hidden>0</span></button>
+                    <button class="tab-btn" role="tab" id="tab-feedback" type="button" data-tab="feedbackTab" aria-controls="feedbackTab" aria-selected="false" tabindex="-1"><span data-icon="edit"></span> Feedback <span id="feedbackBadge" class="tag tag--warning" hidden>0</span></button>
                 </div>
 
                 <section id="announcementsTab" class="tab-panel" role="tabpanel" aria-labelledby="tab-announcements">
@@ -127,6 +128,25 @@
                     <div id="questionList" class="admin-list"></div>
                     <p id="noQuestions" class="empty" hidden></p>
                 </section>
+
+                <section id="feedbackTab" class="tab-panel" role="tabpanel" aria-labelledby="tab-feedback" hidden>
+                    <div class="tab-head">
+                        <h2>Student feedback &amp; incident reports</h2>
+                        <p id="feedbackAverage" class="result-count"></p>
+                    </div>
+                    <div class="filters">
+                        <select id="feedbackFilter" class="input" aria-label="Filter feedback">
+                            <option value="all">All submissions</option>
+                            <option value="open">Open</option>
+                            <option value="resolved">Resolved</option>
+                            <option value="suggestion">Suggestions</option>
+                            <option value="bug">Bug reports</option>
+                        </select>
+                    </div>
+                    <p id="feedbackResultText" class="result-count" aria-live="polite"></p>
+                    <div id="feedbackList" class="admin-list"></div>
+                    <p id="noFeedbackItems" class="empty" hidden></p>
+                </section>
             </div>
 
         </div>
@@ -153,6 +173,8 @@
                             <option value="general">General</option>
                             <option value="deadlines">Deadlines</option>
                             <option value="important">Important</option>
+                            <option value="careers">Careers & OJT</option>
+                            <option value="safety">Health & Safety</option>
                         </select>
                     </div>
                     <div class="field">
@@ -166,9 +188,14 @@
                         <textarea id="detailsInput" class="input" rows="5" placeholder="Write the full announcement" aria-required="true"></textarea>
                     </div>
                     <div class="field">
+                        <label for="applyUrlInput">Apply / registration link (optional)</label>
+                        <input type="url" id="applyUrlInput" class="input" placeholder="https://..." aria-describedby="applyUrlHint">
+                        <p id="applyUrlHint" class="field__hint">Only shown on a Careers &amp; OJT listing's "Apply now" button.</p>
+                    </div>
+                    <div class="field">
                         <label for="expiresInput">Expires on (optional)</label>
                         <input type="date" id="expiresInput" class="input" aria-describedby="expiresHint">
-                        <p id="expiresHint" class="field__hint">After this day the notice is marked as expired for students.</p>
+                        <p id="expiresHint" class="field__hint">After this day the notice is marked as expired for students. Doubles as an application deadline on Careers &amp; OJT listings.</p>
                     </div>
 
                     <label class="check-option"><input type="checkbox" id="pinInput"> <span><span data-icon="pin"></span> Pin to top of the homepage</span></label>
