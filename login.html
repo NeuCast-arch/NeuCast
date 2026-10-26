@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#F5F6F8">
     <title>Login - NeuCast</title>
     <script src="theme.js"></script>
+    <script src="animations.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
@@ -14,6 +15,7 @@
     <link rel="stylesheet" href="skeleton.css">
     <link rel="stylesheet" href="components.css">
     <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="animations.css">
 </head>
 
 <body class="auth-page">
@@ -23,6 +25,14 @@
     <div class="auth">
 
         <aside class="auth-aside" aria-label="About NeuCast">
+            <div class="auth-aside__decor" aria-hidden="true">
+                <span class="shape circle c-academic auth-decor__shape auth-decor__shape--1"></span>
+                <span class="shape hexagon c-general auth-decor__shape auth-decor__shape--2"></span>
+                <span class="shape triangle c-urgent auth-decor__shape auth-decor__shape--3"></span>
+                <span class="shape square c-events auth-decor__shape auth-decor__shape--4"></span>
+                <span class="shape pentagon c-academic auth-decor__shape auth-decor__shape--5"></span>
+                <span class="shape parallelogram c-general auth-decor__shape auth-decor__shape--6"></span>
+            </div>
             <div class="auth-aside__inner">
                 <a class="brand" href="login.html">
                     <span class="brand-mark" data-icon="neucast" aria-hidden="true"></span>
@@ -37,6 +47,8 @@
                         <li class="c-events"><span class="shape-tile"><span class="shape square" aria-hidden="true"></span></span><span><strong>Events</strong><span class="desc">Activities, Seminars, Programs</span></span></li>
                         <li class="c-urgent"><span class="shape-tile"><span class="shape triangle" aria-hidden="true"></span></span><span><strong>Urgent</strong><span class="desc">Emergency, Suspension, Alerts</span></span></li>
                         <li class="c-general"><span class="shape-tile"><span class="shape hexagon" aria-hidden="true"></span></span><span><strong>General</strong><span class="desc">Notices, Updates, Other</span></span></li>
+                        <li class="c-deadlines"><span class="shape-tile"><span class="shape diamond" aria-hidden="true"></span></span><span><strong>Deadlines</strong><span class="desc">Submission Dates, Enrollment Cutoffs, Payments</span></span></li>
+                        <li class="c-important"><span class="shape-tile"><span class="shape octagon" aria-hidden="true"></span></span><span><strong>Important</strong><span class="desc">Guidelines, Policy Updates, Pinned Notices</span></span></li>
                     </ul>
                 </div>
 

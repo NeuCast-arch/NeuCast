@@ -89,6 +89,19 @@ const CHART_SHAPES = {
     hexagon: {
         size: a => { const s = Math.sqrt(2 * a / (3 * Math.sqrt(3))); return { w: 2 * s, h: Math.sqrt(3) * s, value: s }; },
         rule: "s = √(2A ÷ 3√3)"
+    },
+    diamond: {
+        // Treated as a square diamond (equal diagonals) so one area maps to one size.
+        size: a => { const d = Math.sqrt(2 * a); return { w: d, h: d, value: d }; },
+        rule: "d = √(2A)"
+    },
+    octagon: {
+        size: a => {
+            const s = Math.sqrt(a / (2 * (1 + Math.sqrt(2))));
+            const w = (1 + Math.sqrt(2)) * s;
+            return { w: w, h: w, value: s };
+        },
+        rule: "s = √(A ÷ 2(1 + √2))"
     }
 };
 

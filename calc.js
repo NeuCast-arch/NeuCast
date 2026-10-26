@@ -1,9 +1,9 @@
 // ===== Geometry Calculator (right panel) =====
 // Every shape lists: its measurements as [id, label], how to work out the area and perimeter,
 // the steps to show (work), and the box the preview is drawn in (in units).
-// The four category shapes take their formula text from CATEGORIES in data.js.
+// The six category shapes take their formula text from CATEGORIES in data.js.
 // The other four write their own text here.
-const SHAPE_ORDER = ["circle", "square", "rectangle", "triangle", "parallelogram", "trapezoid", "pentagon", "hexagon"];
+const SHAPE_ORDER = ["circle", "square", "rectangle", "triangle", "parallelogram", "trapezoid", "pentagon", "hexagon", "diamond", "octagon"];
 
 const SHAPE_MATH = {
     circle: {
@@ -94,6 +94,30 @@ const SHAPE_MATH = {
         areaWork: v => ["(3√3 ÷ 2) × " + v.s + "²", "2.5981 × " + n2(v.s * v.s)],
         perimWork: v => ["6 × " + v.s],
         box: v => [2 * v.s, Math.sqrt(3) * v.s, "polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%)"]
+    },
+    diamond: {
+        // A rhombus: the diagonals cross at right angles, so each side comes from half of each diagonal.
+        note: "The diagonals cross at right angles; each side is found from half of each diagonal.",
+        inputs: [["d1", "Diagonal 1 (d₁)"], ["d2", "Diagonal 2 (d₂)"]],
+        area: v => (v.d1 * v.d2) / 2,
+        perimeter: v => 4 * Math.sqrt((v.d1 / 2) * (v.d1 / 2) + (v.d2 / 2) * (v.d2 / 2)),
+        areaWork: v => [v.d1 + " × " + v.d2 + " ÷ 2"],
+        perimWork: v => [
+            "4 × √((" + v.d1 + " ÷ 2)² + (" + v.d2 + " ÷ 2)²)",
+            "4 × " + n2(Math.sqrt((v.d1 / 2) * (v.d1 / 2) + (v.d2 / 2) * (v.d2 / 2)))
+        ],
+        box: v => [v.d1, v.d2, "polygon(50% 0, 100% 50%, 50% 100%, 0 50%)"]
+    },
+    octagon: {
+        inputs: [["s", "Side (s)"]],
+        area: v => 2 * (1 + Math.sqrt(2)) * v.s * v.s,
+        perimeter: v => 8 * v.s,
+        areaWork: v => ["2 × (1 + √2) × " + v.s + "²", "4.8284 × " + n2(v.s * v.s)],
+        perimWork: v => ["8 × " + v.s],
+        box: v => {
+            const w = (1 + Math.sqrt(2)) * v.s;
+            return [w, w, "polygon(29.3% 0, 70.7% 0, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0 70.7%, 0 29.3%)"];
+        }
     }
 };
 

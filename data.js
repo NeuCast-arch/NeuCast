@@ -136,6 +136,16 @@ const CATEGORIES = {
         name: "General", shape: "hexagon", desc: "Notices, Updates, Other",
         area: "A = (3√3 / 2) × s²", perimeterLabel: "Perimeter", perimeter: "P = 6s",
         use: "Used for general notices and updates."
+    },
+    deadlines: {
+        name: "Deadlines", shape: "diamond", desc: "Submission Dates, Enrollment Cutoffs, Payments",
+        area: "A = (d₁ × d₂) ÷ 2", perimeterLabel: "Perimeter", perimeter: "P = 4s",
+        use: "Used for approaching deadlines: submission dates, enrollment cutoffs, payments, and upcoming exams."
+    },
+    important: {
+        name: "Important", shape: "octagon", desc: "Guidelines, Policy Updates, Pinned Notices",
+        area: "A = 2(1 + √2) × s²", perimeterLabel: "Perimeter", perimeter: "P = 8s",
+        use: "Used for important or pinned notices administrators want to keep visible, such as official guidelines and policy updates."
     }
 };
 

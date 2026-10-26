@@ -62,6 +62,30 @@
 .filter-label { font-size: .8125rem; font-weight: 600; color: var(--muted); margin-right: .25rem; }
 .filter-row--quiet .chip { border-color: var(--line); min-height: 2rem; font-size: .8125rem; }
 .filter-row--quiet .chip[aria-pressed="true"] { border-color: var(--primary); }
+.chip--toggle { opacity: .75; }
+.chip--toggle:hover { opacity: 1; }
+
+.quick-filters-collapse {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: grid-template-rows var(--dur-2) var(--ease), opacity var(--dur-2) var(--ease);
+}
+.quick-filters-collapse.is-hidden {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows var(--dur-2) var(--ease), opacity var(--dur-1) var(--ease);
+}
+.quick-filters-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    min-height: 0;
+    overflow: hidden;
+}
+.quick-filters-collapse.is-hidden .quick-filters-inner { pointer-events: none; }
 .result-count { min-height: 1.25rem; font-size: .875rem; color: var(--muted); }
 
 .notices { display: grid; gap: .75rem; }

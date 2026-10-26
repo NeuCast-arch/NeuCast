@@ -95,7 +95,7 @@
 .tag--warning { background: var(--warning-soft); color: var(--warning-ink); }
 .tag--danger  { background: var(--danger-soft);  color: var(--danger-ink); }
 .tag--info    { background: var(--info-soft);    color: var(--info-ink); }
-.tag.c-academic, .tag.c-events, .tag.c-urgent, .tag.c-general { background: var(--c-soft); color: var(--c-ink); }
+.tag.c-academic, .tag.c-events, .tag.c-urgent, .tag.c-general, .tag.c-deadlines, .tag.c-important { background: var(--c-soft); color: var(--c-ink); }
 .tag .shape { --s: .75rem; }
 
 /* ---------- Form controls ---------- */

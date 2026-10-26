@@ -34,6 +34,7 @@ const needsCard = document.getElementById("needsCard");
 let activeCategory = "all";   // category chips
 let activeSmart = "all";      // quick filters
 let activeDate = "";          // calendar day, like "2026-10-4"
+let quickFiltersHidden = false; // "Show" row collapsed via Unshow button
 let openItem = null;          // the announcement open in the details pop-up
 let recoveryScope = "all";    // all, university, or course
 
@@ -161,13 +162,18 @@ function renderFilters() {
     categoryBar.innerHTML = html;
 
     // Quick filters
-    let quick = '<span class="filter-label">Show</span>';
+    let chips = "";
     for (let i = 0; i < SMART_FILTERS.length; i++) {
         const f = SMART_FILTERS[i];
         if (f.studentOnly && !student) continue;
-        quick += '<button type="button" class="chip" data-smart="' + f.name + '" aria-pressed="' + (f.name === activeSmart) + '">' + f.label +
+        chips += '<button type="button" class="chip" data-smart="' + f.name + '" aria-pressed="' + (f.name === activeSmart) + '">' + f.label +
             '<span class="chip__count">' + countSmart(f.name) + "</span></button>";
     }
+    const quick = '<span class="filter-label">Show</span>' +
+        '<button type="button" class="chip chip--toggle" id="toggleQuickFilters" aria-pressed="' + quickFiltersHidden + '">' +
+        (quickFiltersHidden ? "Show" : "Unshow") + "</button>" +
+        '<div class="quick-filters-collapse' + (quickFiltersHidden ? " is-hidden" : "") + '" id="quickFiltersCollapse">' +
+        '<div class="quick-filters-inner">' + chips + "</div></div>";
     sideNav.innerHTML = quick;
 }
 
@@ -181,6 +187,16 @@ categoryBar.addEventListener("click", function (event) {
 sideNav.addEventListener("click", function (event) {
     const chip = event.target.closest("button");
     if (!chip) return;
+    if (chip.id === "toggleQuickFilters") {
+        quickFiltersHidden = !quickFiltersHidden;
+        // Toggle the class in place (rather than re-rendering innerHTML)
+        // so the CSS transition on the collapse wrapper actually plays.
+        const collapse = document.getElementById("quickFiltersCollapse");
+        if (collapse) collapse.classList.toggle("is-hidden", quickFiltersHidden);
+        chip.textContent = quickFiltersHidden ? "Show" : "Unshow";
+        chip.setAttribute("aria-pressed", String(quickFiltersHidden));
+        return;
+    }
     chooseSmart(chip.dataset.smart);
     refocus('#sideNav [data-smart="' + chip.dataset.smart + '"]');
 });

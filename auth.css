@@ -16,9 +16,22 @@
 .auth--single { grid-template-columns: minmax(0, 1fr); }
 
 /* ---------- Left panel ---------- */
-.auth-aside { background: var(--primary-soft); color: var(--text); }
+.auth-aside { background: var(--primary-soft); color: var(--text); position: relative; overflow: hidden; }
+
+/* Decorative geometric shapes scattered behind the aside copy — reuses the
+   same .shape / category-color system used for the Academic/Events/Urgent/
+   General legend, just larger, faint and non-interactive. */
+.auth-aside__decor { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.auth-decor__shape { position: absolute; background: var(--c, var(--primary)); opacity: .14; }
+.auth-decor__shape--1 { --s: 12rem; top: -4.5rem; right: -3.5rem; }
+.auth-decor__shape--2 { --s: 7rem; top: 12%; left: 58%; opacity: .1; transform: rotate(8deg); }
+.auth-decor__shape--3 { --s: 6.5rem; bottom: 16%; right: 8%; opacity: .16; transform: rotate(-10deg); }
+.auth-decor__shape--4 { --s: 5rem; top: 42%; left: -2rem; opacity: .12; transform: rotate(20deg); }
+.auth-decor__shape--5 { --s: 7.5rem; bottom: -3rem; left: 10%; opacity: .1; }
+.auth-decor__shape--6 { --s: 9rem; bottom: -2.5rem; right: 18%; opacity: .08; transform: rotate(-6deg); }
+
 .auth-aside__inner {
-    position: sticky; top: 0; min-height: 100vh; min-height: 100dvh;
+    position: sticky; z-index: 1; top: 0; min-height: 100vh; min-height: 100dvh;
     display: flex; flex-direction: column; justify-content: space-between; gap: 2rem;
     padding: clamp(2rem, 5vw, 4rem);
 }

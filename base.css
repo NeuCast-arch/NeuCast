@@ -81,6 +81,8 @@ main:focus { outline: none; }
 .shape.parallelogram { clip-path: polygon(20% 0, 100% 0, 80% 100%, 0 100%); }
 .shape.trapezoid     { clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%); }
 .shape.pentagon      { clip-path: polygon(50% 0, 100% 38%, 81% 100%, 19% 100%, 0 38%); }
+.shape.diamond       { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.shape.octagon       { clip-path: polygon(29.3% 0, 70.7% 0, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0 70.7%, 0 29.3%); }
 
 /* A shape sitting in a soft tinted tile: the standard way to show a category */
 .shape-tile {

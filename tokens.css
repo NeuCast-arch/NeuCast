@@ -48,6 +48,8 @@
     --cat-events:   #A21F7A; --cat-events-soft:   #FBEAF5; --cat-events-ink:   #8C1A68;
     --cat-urgent:   #C62828; --cat-urgent-soft:   #FDECEC; --cat-urgent-ink:   #A61E1E;
     --cat-general:  #3E6A7E; --cat-general-soft:  #E8F0F3; --cat-general-ink:  #2F566A;
+    --cat-deadlines: #B9540B; --cat-deadlines-soft: #FCEEDF; --cat-deadlines-ink: #8A3F08;
+    --cat-important: #7A5B00; --cat-important-soft: #F5EFD6; --cat-important-ink: #5C4500;
 
     /* --- Shape, spacing, elevation --- */
     --r-sm: 8px;
@@ -108,6 +110,8 @@
     --cat-events:   #F08CCB; --cat-events-soft:   #3A1F33; --cat-events-ink:   #F5B8E0;
     --cat-urgent:   #FF8A80; --cat-urgent-soft:   #3B1F22; --cat-urgent-ink:   #FFB4AE;
     --cat-general:  #8FBACB; --cat-general-soft:  #1F313A; --cat-general-ink:  #B5D3DF;
+    --cat-deadlines: #F2A94E; --cat-deadlines-soft: #3A2A12; --cat-deadlines-ink: #F7C684;
+    --cat-important: #D8C457; --cat-important-soft: #332E0F; --cat-important-ink: #E8D685;
 
     --shadow-pop: 0 12px 36px rgba(0, 0, 0, .5), 0 1px 3px rgba(0, 0, 0, .4);
     --scrim: rgba(4, 6, 10, .66);
@@ -122,6 +126,8 @@ html[data-text="large"] { font-size: 112.5%; }
 .c-events   { --c: var(--cat-events);   --c-soft: var(--cat-events-soft);   --c-ink: var(--cat-events-ink); }
 .c-urgent   { --c: var(--cat-urgent);   --c-soft: var(--cat-urgent-soft);   --c-ink: var(--cat-urgent-ink); }
 .c-general  { --c: var(--cat-general);  --c-soft: var(--cat-general-soft);  --c-ink: var(--cat-general-ink); }
+.c-deadlines { --c: var(--cat-deadlines); --c-soft: var(--cat-deadlines-soft); --c-ink: var(--cat-deadlines-ink); }
+.c-important { --c: var(--cat-important); --c-soft: var(--cat-important-soft); --c-ink: var(--cat-important-ink); }
 
 /* Calculator-only shapes are not categories, so they stay neutral */
 .k-rectangle, .k-parallelogram, .k-trapezoid, .k-pentagon { --c: var(--text-2); --c-soft: var(--surface-2); --c-ink: var(--text); }
