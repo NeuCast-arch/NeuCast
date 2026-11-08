@@ -660,3 +660,166 @@ function markApplied(studentId, announcementId) {
         localStorage.setItem(APPLIED_KEY_PREFIX + studentId, JSON.stringify(applied));
     }
 }
+
+// =====================================================
+//  Notifications bell + web push (Native Notify)
+//  ------------------------------------------------------------------
+//  The bell in the header opens the notifications inbox, and this browser
+//  registers itself as a device so a push sent from Native Notify reaches it.
+//
+//  WHO RECEIVES WHAT
+//    a logged-in student  -> "neucast-course-<course>"   (e.g. neucast-course-bsit)
+//    the administrator    -> "neucast-staff"
+//    a visitor, logged out -> "neucast-public"
+//
+//  A course announcement is sent to that course's id only, so it reaches the
+//  students of that course and nobody else. "All devices" reaches everyone.
+// =====================================================
+(function () {
+    "use strict";
+
+    var FILES = "native-notify/web/";
+    // ONE service worker for the whole site. It has to sit at the site root
+    // (same folder as index.html) so its scope covers every page -- a worker
+    // in a subfolder could not receive pushes for pages outside that folder.
+    var SERVICE_WORKER = "firebase-messaging-sw.js";
+    var BADGE_CAP = 99;
+
+    // The subscriber id this browser registers under (see the note above).
+    function subscriberId() {
+        try {
+            var student = typeof getCurrentStudent === "function" ? getCurrentStudent() : null;
+            if (student && student.course) {
+                return "neucast-course-" + String(student.course).toLowerCase().replace(/[^a-z0-9]+/g, "-");
+            }
+            if (typeof isLoggedIn === "function" && isLoggedIn()) return "neucast-staff";
+        } catch (error) {
+            // Nothing saved in this browser yet: fall through to the public id
+        }
+        return "neucast-public";
+    }
+
+    function say(text, type) {
+        if (window.NeuUI && NeuUI.toast) NeuUI.toast(text, type || "info");
+    }
+
+    // The bell + inbox stylesheet, loaded once, from this site's own folder.
+    function loadBellStyles() {
+        if (document.querySelector("link[data-nn-bell]")) return;
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = FILES + "nativeNotifyBell.css";
+        link.setAttribute("data-nn-bell", "1");
+        document.head.appendChild(link);
+    }
+
+    function start() {
+        if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) return;
+        loadBellStyles();
+
+        Promise.all([
+            import("./" + FILES + "nativeNotifyIds.js"),
+            import("./" + FILES + "native-notify-web-push.js"),
+            import("./" + FILES + "native-notify-bell.js")
+        ]).then(function (loaded) {
+            var ids = loaded[0];
+            var push = loaded[1];
+            var bellLib = loaded[2];
+
+            var settings = {
+                appId: ids.NN_APP_ID,
+                webKey: ids.NN_WEB_KEY,
+                subscriberId: subscriberId(),
+                serviceWorkerPath: SERVICE_WORKER
+            };
+
+            // A browser that already allowed notifications stays registered on
+            // every visit -- silently, no prompt. A browser that never answered
+            // is left alone until its owner turns notifications on.
+            push.ensureNativeNotifyWebPush(settings).catch(function () {});
+
+            var hostButton = document.getElementById("bellBtn");
+            var hostCount = document.getElementById("bellCount");
+
+            var bell = bellLib.mountNativeNotifyBell({
+                appId: ids.NN_APP_ID,
+                webKey: ids.NN_WEB_KEY,
+                title: "Notifications",
+                emptyText: "No notifications yet. Announcements sent to you will show up here.",
+                position: "top-right",
+                pollMs: 30000,
+                showCount: !hostButton,
+                // NeuCast colors, so the panel matches the page in light and dark
+                theme: {
+                    accent: "var(--primary)",
+                    background: "var(--surface)",
+                    card: "var(--surface)",
+                    border: "var(--line)",
+                    title: "var(--text)",
+                    text: "var(--text-2)",
+                    mutedText: "var(--muted)",
+                    dot: "var(--danger)",
+                    badgeText: "#ffffff",
+                    radius: "var(--r)"
+                },
+                onUnreadChange: function (count) {
+                    if (hostCount) {
+                        hostCount.textContent = count > BADGE_CAP ? BADGE_CAP + "+" : String(count);
+                        hostCount.hidden = count === 0;
+                    }
+                    if (hostButton) {
+                        hostButton.setAttribute("aria-label", count === 0 ? "Notifications" : "Notifications, " + count + " unread");
+                    }
+                }
+            });
+
+            var panel = bell.root.querySelector(".nn-bell__panel");
+            var ownButton = bell.root.querySelector(".nn-bell__button");
+
+            // Header pages already have the NeuCast bell button, so the inbox
+            // opens from that one and the widget's own button stays hidden.
+            // The sign-in pages have no header, so there the widget's own bell
+            // (styled with the NeuCast colors above) is the one you see.
+            if (hostButton && ownButton) ownButton.style.display = "none";
+
+            function enableNow() {
+                return push.enableNativeNotifyWebPush(settings).then(function (result) {
+                    if (result.ok) say("Notifications are on for this browser", "success");
+                    else if (result.message) say(result.message, "error");
+                    return result;
+                });
+            }
+
+            // A browser may only ask for permission after a click, so the first
+            // click on the bell asks -- and then opens the inbox.
+            if (hostButton) {
+                hostButton.setAttribute("aria-haspopup", "dialog");
+                hostButton.addEventListener("click", function () {
+                    if (Notification.permission === "default") {
+                        enableNow().then(function () {
+                            bell.open();
+                            hostButton.setAttribute("aria-expanded", "true");
+                        });
+                        return;
+                    }
+                    if (Notification.permission === "denied") {
+                        say("This browser is blocking notifications for NeuCast. Allow them in the site settings.", "error");
+                    }
+                    bell.toggle();
+                    var open = !!(panel && !panel.hidden);
+                    hostButton.setAttribute("aria-expanded", String(open));
+                    if (!open) hostButton.focus();
+                });
+            } else if (ownButton) {
+                ownButton.addEventListener("click", function () {
+                    if (Notification.permission === "default") enableNow();
+                });
+            }
+        }).catch(function () {
+            // Push is not available in this browser: the site works as before.
+        });
+    }
+
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+    else start();
+})();
