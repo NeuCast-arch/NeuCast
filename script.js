@@ -397,26 +397,13 @@ function scrollToList() {
 }
 
 // ===== 9. Bell, search, mark all, links =====
-function updateBell() {
-    let total = 0;
-    for (let i = 0; i < announcements.length; i++) {
-        const item = announcements[i];
-        if (!canSee(item) || getKey(item) !== "urgent") continue;
-        if (student && !isUnread(item)) continue;
-        total++;
-    }
-    bellCount.textContent = total;
-    bellCount.hidden = total === 0;
-    document.getElementById("bellBtn").setAttribute("aria-label", total === 0 ? "Urgent announcements" : "Urgent announcements, " + plural(total, "unread", "unread"));
-}
+// The header bell opens the notifications inbox now, and its badge is the
+// unread notification count (both wired in data.js), so this page no longer
+// paints the unread Urgent count there. That count still shows on the
+// "Urgent" chip in the category bar above the list.
+function updateBell() {}
 
-document.getElementById("bellBtn").addEventListener("click", function () {
-    activeSmart = "all";
-    activeDate = "";
-    searchInput.value = "";
-    setCategory("urgent");
-    scrollToList();
-});
+document.getElementById("bellBtn").setAttribute("aria-label", "Notifications");
 
 document.getElementById("searchForm").addEventListener("submit", function (event) {
     event.preventDefault();

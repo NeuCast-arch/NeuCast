@@ -1,44 +1,57 @@
 
-importScripts(
-  "https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"
-);
+// Native Notify web push -- the ONE service worker for this site.
+// It sits at the site root (next to index.html) so its scope covers every
+// page: index, archive, feedback, careers, safety, admin and the sign-in
+// pages. It shows each push and opens the link the push carries on click.
+//
+// It replaced the unused Firebase Messaging worker that used to live here:
+// NeuCast web push is delivered by Native Notify now, so no Firebase
+// Messaging code is needed.
 
-importScripts(
-  "https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js"
-);
-
-firebase.initializeApp({
-  apiKey: "AIzaSyDMfof-dCkVjfgayknV65F29uYh7bi-h_s",
-  authDomain: "neucast-55d0c.firebaseapp.com",
-  databaseURL: "https://neucast-55d0c-default-rtdb.firebaseio.com",
-  projectId: "neucast-55d0c",
-  storageBucket: "neucast-55d0c.firebasestorage.app",
-  messagingSenderId: "805265525390",
-  appId: "1:805265525390:web:899a4ee9b2daa4099357df",
+self.addEventListener("install", function () {
+  self.skipWaiting();
 });
 
-const messaging = firebase.messaging();
+self.addEventListener("activate", function (event) {
+  event.waitUntil(self.clients.claim());
+});
 
-messaging.onBackgroundMessage((payload) => {
-  const notificationTitle =
-    payload.notification?.title || "NeuCast Campus Update";
+self.addEventListener("push", function (event) {
+  var payload = {};
+  try {
+    payload = event.data ? event.data.json() : {};
+  } catch (error) {
+    payload = { title: "NeuCast", body: event.data ? event.data.text() : "" };
+  }
 
-  const notificationOptions = {
-    body: payload.notification?.body || "You have a new campus announcement.",
-    icon: "./icon-192.png",
-    data: payload.data || {}
-  };
-
-  self.registration.showNotification(
-    notificationTitle,
-    notificationOptions
+  event.waitUntil(
+    self.registration.showNotification(payload.title || "NeuCast", {
+      body: payload.body || "",
+      image: payload.image,
+      tag: payload.tag,
+      data: payload.data || {}
+    })
   );
 });
 
-self.addEventListener("notificationclick", (event) => {
+self.addEventListener("notificationclick", function (event) {
   event.notification.close();
 
+  var data = event.notification.data || {};
+  // A push can carry its destination, e.g. {"url": "archive.html"}.
+  // Relative, so it works on a project site (username.github.io/NeuCast/)
+  // and on a custom domain alike.
+  var target = new URL(data.url || ".", self.location.href).href;
+
   event.waitUntil(
-    clients.openWindow("./")
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(function (windows) {
+      // Focus a tab that is already on the destination instead of opening a
+      // second one. Never use window.navigate() here: it rejects silently and
+      // the tap would look dead.
+      for (var i = 0; i < windows.length; i++) {
+        if (windows[i].url.split("#")[0] === target.split("#")[0]) return windows[i].focus();
+      }
+      return self.clients.openWindow(target);
+    })
   );
 });

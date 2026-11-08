@@ -18,11 +18,7 @@
 }
 
 .top-right { margin-left: auto; display: flex; align-items: center; gap: .25rem; }
-.bell-count {
-    position: absolute; top: .125rem; right: .0625rem; min-width: 1.125rem; padding: 0 .3rem; border-radius: var(--r-pill);
-    background: var(--danger); color: #fff; font-size: .6875rem; font-weight: 700; line-height: 1.125rem; text-align: center;
-}
-:root[data-theme="dark"] .bell-count { color: #12151C; }
+/* .bell-count lives in components.css now: the header bell badge is on every page. */
 .user {
     display: flex; align-items: center; gap: .625rem; min-height: var(--tap); padding: .25rem .75rem .25rem .25rem;
     border-radius: var(--r-pill); color: var(--text); text-decoration: none;
