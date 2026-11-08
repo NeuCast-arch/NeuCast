@@ -36,6 +36,39 @@ if `cloud-config.js` has a database URL, mirrored to Firebase (see `CLOUD-SETUP.
 
 Script order matters and is set in the one `<script src="boot.js" data-scripts="...">` tag at the end of each page.
 
+## Push notifications (bell + inbox)
+
+The bell in the header opens the notifications inbox. It is on every page and it works for
+everyone: students, the administrator, and visitors who are not logged in.
+
+- The bell button (`#bellBtn`) is part of each page's header. `data.js` fills its badge with the
+  unread count and opens the inbox from it. On the sign-in pages, which have no header, the inbox
+  widget draws its own bell.
+- The inbox is Native Notify's web bell widget: the files in `native-notify/web/`, plus
+  `firebase-messaging-sw.js` at the site root — the ONE service worker for the site, which shows
+  each push and opens its link.
+- `native-notify/web/nativeNotifyIds.js` holds the app id and the publishable web key. Both are
+  public by design; the app token (the key that can send) is never in this site.
+
+### Who a push reaches
+
+Each browser registers itself under one subscriber id (see the end of `data.js`):
+
+| Who is using the browser | Subscriber id |
+| --- | --- |
+| A student who is logged in | `neucast-course-<course>` — e.g. `neucast-course-bsit` |
+| The administrator | `neucast-staff` |
+| A visitor on the sign-in pages | `neucast-public` |
+
+A **course announcement** is sent to that one course id only, so it reaches that course's students
+and nobody else:
+
+    { "type": "subscribers", "subscriberIds": ["neucast-course-bsit"] }
+
+`{ "type": "all" }` reaches every registered browser. The ids are not secret — they are written in
+`data.js`. A browser registers when its owner allows notifications, and re-registers on every visit
+once allowed.
+
 ## Four shape-function pages
 On top of the Calm Geometry homepage, NeuCast has one page per "shape module": `archive.html` (Rectangle),
 `feedback.html` (Pentagon), `careers.html` (Trapezoid), `safety.html` (Parallelogram). They are linked from the

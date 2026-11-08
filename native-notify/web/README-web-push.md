@@ -6,6 +6,14 @@ This pull request lets your site turn on browser notifications and register
 each browser with Native Notify as a **web** device. It is additive — nothing
 existing is modified.
 
+> **This site is already wired — read this first.** NeuCast needed no second service
+> worker, so the worker listeners live in the site's existing
+> `firebase-messaging-sw.js` at the site root, and `data.js` registers the browser
+> there (`serviceWorkerPath: "firebase-messaging-sw.js"`). The checklist at the
+> bottom of this file is therefore already done; the plain-JS snippets below are
+> kept as reference only. The section that still matters is "Not seeing the
+> notification?".
+
 > **Public values only.** `native-notify/web/nativeNotifyIds.js` holds your app id and the PUBLISHABLE web key — both safe to commit and in page source. Never put your app **token** (the key that can send) in website code.
 
 ## What is in this PR
