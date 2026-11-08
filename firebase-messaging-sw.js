@@ -28,7 +28,6 @@ self.addEventListener("push", function (event) {
     self.registration.showNotification(payload.title || "NeuCast", {
       body: payload.body || "",
       image: payload.image,
-      icon: "./icon-192.png",
       tag: payload.tag,
       data: payload.data || {}
     })
