@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="skeleton.css">
   <link rel="stylesheet" href="components.css">
   <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="notify.css">
   <link rel="stylesheet" href="animations.css">
 </head>
 
@@ -62,6 +63,17 @@
           <p id="studentInfo" class="intro__sub"></p>
         </div>
         <button id="studentAction" type="button" class="btn btn--ghost btn--sm"><span data-icon="logout"></span> Log out</button>
+      </section>
+
+      <section id="alertPrompt" class="alert alert-prompt" aria-labelledby="alertPromptTitle" hidden>
+        <div class="alert-prompt__text">
+          <strong id="alertPromptTitle">Get alerted when something new is posted</strong>
+          <small>Urgent notices and announcements for your course reach you even if NeuCast isn't the tab in front.</small>
+        </div>
+        <div class="alert-prompt__actions">
+          <button type="button" id="alertPromptOn" class="btn btn--sm">Turn on alerts</button>
+          <button type="button" id="alertPromptLater" class="btn btn--secondary btn--sm">Not now</button>
+        </div>
       </section>
 
       <form id="searchForm" class="search" role="search">
@@ -234,6 +246,23 @@
             <input type="radio" name="textsize" id="textLarge" value="large"><label for="textLarge">Large</label>
           </div>
         </fieldset>
+        <fieldset class="setting setting--alerts" id="alertSettings">
+          <legend>Alerts</legend>
+          <label class="setting setting--row" for="alertsOn">
+            <span><strong>Alert me about new announcements</strong><small>A pop-up inside NeuCast the moment one is posted or edited.</small></span>
+            <input type="checkbox" id="alertsOn" class="switch" role="switch">
+          </label>
+          <label class="setting setting--row" for="alertsSystem">
+            <span><strong>System notifications</strong><small>Also notify me when NeuCast isn't in front.</small></span>
+            <input type="checkbox" id="alertsSystem" class="switch" role="switch">
+          </label>
+          <label class="setting setting--row" for="alertsSound">
+            <span><strong>Sound for urgent notices</strong><small>A short chime for Urgent and Health notices.</small></span>
+            <input type="checkbox" id="alertsSound" class="switch" role="switch">
+          </label>
+          <p class="alerts-hint" id="alertsHint" aria-live="polite"></p>
+          <button type="button" id="alertsTest" class="btn btn--secondary btn--sm">Send a test alert</button>
+        </fieldset>
         <label class="setting setting--row" for="hideReadToggle">
           <span><strong>Hide announcements I've read</strong><small>Keeps your list short. You can still find them in Needs you.</small></span>
           <input type="checkbox" id="hideReadToggle" class="switch" role="switch">
@@ -274,6 +303,6 @@
 
   <noscript><p class="noscript">NeuCast needs JavaScript to show your announcements. Please turn it on and reload.</p></noscript>
 
-  <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js script.js calendar.js calc.js"></script>
+  <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js script.js calendar.js calc.js notify.js"></script>
 </body>
 </html>

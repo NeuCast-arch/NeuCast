@@ -41,3 +41,6 @@ Removed (no longer used): `style.css`, `neo.css`, `minimal.css`, `recovery.css`,
 
 ## Settings
 Settings now has Appearance (System / Light / Dark), Text size and "Hide announcements I've read". Old saved settings keep working.
+- quick filters closed by default (2026-10-29)
+- category chips in one horizontal row, All first (2026-10-29)
+- category chips: row 1 All..General, row 2 Deadlines/Important/Careers/Health (2026-10-29)

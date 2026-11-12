@@ -191,8 +191,9 @@
         return false;
     }
     // Quiet download every few seconds; pages listen for "neucast:synced" to redraw
-    function poll() {
-        if (document.hidden || pending > 0) return;
+    function poll(force) {
+        // A hidden tab normally sleeps; notify.js asks for "force" so alerts still arrive
+        if ((document.hidden && force !== true) || pending > 0) return;
         fetch(ROOT + ".json").then(function (r) { return r.json(); }).then(function (db) {
             if (pending > 0) return;
             if (applyDb(db || {})) window.dispatchEvent(new Event("neucast:synced"));
@@ -218,5 +219,39 @@
 
     setInterval(poll, 8000);
     document.addEventListener("visibilitychange", function () { if (!document.hidden) poll(); });
+
+    // ----- Live feed (free): Firebase streams changes over plain HTTP (Server-Sent Events). -----
+    // When an announcement is posted or edited, the browser is told within about a second instead of
+    // waiting for the next 8 second check. Polling above stays on as the safety net.
+    function openLiveFeed() {
+        if (!window.EventSource) return;
+        var gotFirst = false, es;
+        try { es = new EventSource(ROOT + "/kv/neucast_announcements.json"); } catch (e) { return; }
+        function onChange(ev) {
+            if (!gotFirst) { gotFirst = true; return; }   // the first event is just the current value
+            if (pending > 0) return;                      // our own save is still going up
+            try {
+                // The event already carries the new announcements, so no extra download is needed
+                var m = JSON.parse(ev.data);
+                if (m && m.path === "/" && typeof m.data === "string") {
+                    if (setLocal("neucast_announcements", m.data, function (cur) { return cur === m.data; })) {
+                        window.dispatchEvent(new Event("neucast:synced"));
+                    }
+                    return;
+                }
+            } catch (e) { /* fall through to a normal check */ }
+            poll(true);
+        }
+        es.addEventListener("put", onChange);
+        es.addEventListener("patch", onChange);
+        es.onerror = function () { /* the browser reconnects by itself; polling covers the gap */ };
+    }
+    openLiveFeed();
+
+    // Background tabs: a slow safety check (once a minute), only when system alerts are on
+    setInterval(function () {
+        if (document.hidden && window.NeuNotify && window.NeuNotify.wantsBackground()) poll(true);
+    }, 60000);
+
     window.NeuCloud = { pull: pullSync, poll: poll };
 })();

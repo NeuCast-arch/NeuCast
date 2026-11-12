@@ -70,6 +70,18 @@
         label.textContent = text;
         el.appendChild(label);
 
+        if (options.action && options.action.label) {
+            var actBtn = document.createElement("button");
+            actBtn.type = "button";
+            actBtn.className = "toast__action";
+            actBtn.textContent = options.action.label;
+            actBtn.addEventListener("click", function () {
+                remove();
+                if (typeof options.action.onClick === "function") options.action.onClick();
+            });
+            el.appendChild(actBtn);
+        }
+
         var closeBtn = document.createElement("button");
         closeBtn.type = "button";
         closeBtn.className = "toast__close";

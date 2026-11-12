@@ -34,7 +34,7 @@ const needsCard = document.getElementById("needsCard");
 let activeCategory = "all";   // category chips
 let activeSmart = "all";      // quick filters
 let activeDate = "";          // calendar day, like "2026-10-4"
-let quickFiltersHidden = false; // "Show" row collapsed via Unshow button
+let quickFiltersHidden = true;  // quick filters start closed; the Show button opens them
 let openItem = null;          // the announcement open in the details pop-up
 let recoveryScope = "all";    // all, university, or course
 
@@ -155,6 +155,7 @@ function renderFilters() {
     for (let i = 0; i < categoryKeys.length; i++) {
         const key = categoryKeys[i];
         const cat = CATEGORIES[key];
+        if (key === "deadlines") html += '<span class="filter-break" aria-hidden="true"></span>'; // second row starts here
         html += '<button type="button" class="chip c-' + key + '" data-category="' + key + '" aria-pressed="' + (activeCategory === key) + '">' +
             '<span class="shape sm ' + cat.shape + '" aria-hidden="true"></span>' + cat.name +
             '<span class="chip__count">' + countNotices(key) + "</span></button>";
@@ -169,7 +170,7 @@ function renderFilters() {
         chips += '<button type="button" class="chip" data-smart="' + f.name + '" aria-pressed="' + (f.name === activeSmart) + '">' + f.label +
             '<span class="chip__count">' + countSmart(f.name) + "</span></button>";
     }
-    const quick = '<button type="button" class="chip chip--toggle" id="toggleQuickFilters" aria-pressed="' + quickFiltersHidden + '">' +
+    const quick = '<button type="button" class="chip chip--toggle" id="toggleQuickFilters" aria-controls="quickFiltersCollapse" aria-expanded="' + !quickFiltersHidden + '">' +
         (quickFiltersHidden ? "Show" : "Unshow") + "</button>" +
         '<div class="quick-filters-collapse' + (quickFiltersHidden ? " is-hidden" : "") + '" id="quickFiltersCollapse">' +
         '<div class="quick-filters-inner">' + chips + "</div></div>";
@@ -193,7 +194,7 @@ sideNav.addEventListener("click", function (event) {
         const collapse = document.getElementById("quickFiltersCollapse");
         if (collapse) collapse.classList.toggle("is-hidden", quickFiltersHidden);
         chip.textContent = quickFiltersHidden ? "Show" : "Unshow";
-        chip.setAttribute("aria-pressed", String(quickFiltersHidden));
+        chip.setAttribute("aria-expanded", String(!quickFiltersHidden));
         return;
     }
     chooseSmart(chip.dataset.smart);
@@ -397,13 +398,26 @@ function scrollToList() {
 }
 
 // ===== 9. Bell, search, mark all, links =====
-// The header bell opens the notifications inbox now, and its badge is the
-// unread notification count (both wired in data.js), so this page no longer
-// paints the unread Urgent count there. That count still shows on the
-// "Urgent" chip in the category bar above the list.
-function updateBell() {}
+function updateBell() {
+    let total = 0;
+    for (let i = 0; i < announcements.length; i++) {
+        const item = announcements[i];
+        if (!canSee(item) || getKey(item) !== "urgent") continue;
+        if (student && !isUnread(item)) continue;
+        total++;
+    }
+    bellCount.textContent = total;
+    bellCount.hidden = total === 0;
+    document.getElementById("bellBtn").setAttribute("aria-label", total === 0 ? "Urgent announcements" : "Urgent announcements, " + plural(total, "unread", "unread"));
+}
 
-document.getElementById("bellBtn").setAttribute("aria-label", "Notifications");
+document.getElementById("bellBtn").addEventListener("click", function () {
+    activeSmart = "all";
+    activeDate = "";
+    searchInput.value = "";
+    setCategory("urgent");
+    scrollToList();
+});
 
 document.getElementById("searchForm").addEventListener("submit", function (event) {
     event.preventDefault();

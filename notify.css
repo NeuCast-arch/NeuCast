@@ -1,0 +1,27 @@
+/* =====================================================
+   NeuCast alerts: the "Turn on alerts" prompt, the toast Read button.
+   Colors and sizes come from tokens.css; nothing is hard-coded here.
+   ===================================================== */
+
+/* Toast "Read" / "View" button (sits before Dismiss) */
+.toast__action {
+    margin-left: auto; padding: .25rem .625rem; min-height: 2rem; border: 1px solid currentColor; border-radius: var(--r-sm);
+    background: transparent; color: inherit; font: inherit; font-weight: 700; cursor: pointer;
+}
+.toast__action:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+.toast__action + .toast__close { margin-left: 0; }
+.toast { pointer-events: auto; }
+
+/* One-time prompt on the homepage */
+.alert-prompt { align-items: center; flex-wrap: wrap; row-gap: .5rem; margin-bottom: var(--sp-4); }
+.alert-prompt[hidden] { display: none; }
+.alert-prompt__text { flex: 1 1 14rem; min-width: 0; }
+.alert-prompt__text strong { display: block; }
+.alert-prompt__text small { display: block; font-weight: 400; }
+.alert-prompt__actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+/* Settings > Alerts */
+.setting--alerts { display: grid; gap: .75rem; }
+.setting--alerts .setting--row + .setting--row { padding-top: .75rem; border-top: 1px solid var(--line); }
+.setting--alerts .alerts-hint { margin: 0; color: var(--muted); font-size: .875rem; line-height: 1.45; }
+.setting--alerts .btn { justify-self: start; }
