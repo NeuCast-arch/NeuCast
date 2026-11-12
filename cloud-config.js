@@ -15,5 +15,5 @@ window.NEUCAST_CLOUD = {
 //  Step-by-step: see ONESIGNAL-SETUP.md
 // ---------------------------------------------------------------------------
 window.NEUCAST_PUSH = {
-    oneSignalAppId: ""
+    oneSignalAppId: "b941dd8a-f192-48e6-905b-60ac3630f9b5"
 };
