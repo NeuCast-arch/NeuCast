@@ -130,7 +130,10 @@
         if (swReg) return Promise.resolve(swReg);
         if (!("serviceWorker" in navigator)) return Promise.resolve(null);
         if (pushOn()) {   // OneSignal's worker owns this folder; borrow it, do not register a second one
-            return navigator.serviceWorker.getRegistration().then(function (reg) { swReg = reg || null; return swReg; }).catch(function () { return null; });
+            if (!navigator.serviceWorker.getRegistration) return Promise.resolve(null);
+            try {
+                return navigator.serviceWorker.getRegistration().then(function (reg) { swReg = reg || null; return swReg; }).catch(function () { return null; });
+            } catch (e) { return Promise.resolve(null); }
         }
         return navigator.serviceWorker.register("sw.js")
             .then(function () { return navigator.serviceWorker.ready; })
@@ -303,7 +306,8 @@
     }
     function showPromptIfNeeded() {
         if (!prompt) return;
-        var dismissed = !!localStorage.getItem(PROMPT_KEY);
+        var snoozedAt = Number(localStorage.getItem(PROMPT_KEY)) || 0;
+        var dismissed = Date.now() - snoozedAt < 3 * 24 * 60 * 60 * 1000;   // "Not now" = ask again in 3 days
         var install = pushOn() && window.NeuPush.needsInstall();   // iPhone, not on the Home Screen yet
         setPromptMode(install);
         prompt.hidden = dismissed || !(install || (supported() && permission() === "default"));
@@ -322,7 +326,7 @@
             });
         });
         document.getElementById("alertPromptLater").addEventListener("click", function () {
-            localStorage.setItem(PROMPT_KEY, "1");
+            localStorage.setItem(PROMPT_KEY, String(Date.now()));
             prompt.hidden = true;
         });
     }
@@ -368,6 +372,7 @@
                 enableSystem().then(function () { renderSettings(); showPromptIfNeeded(); });
             } else {
                 prefs.system = false; savePrefs(); renderSettings();
+                if (pushOn()) window.NeuPush.setOptIn(false);   // really stop phone push on this device
             }
         });
         elTest.addEventListener("click", function () { test(true); });

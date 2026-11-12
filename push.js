@@ -8,8 +8,12 @@
    Off unless cloud-config.js has window.NEUCAST_PUSH.oneSignalAppId.
    Setup: see ONESIGNAL-SETUP.md
 
-   Students: this file subscribes the device and tags it with the course,
-             so a "BSIT only" notice reaches only BSIT phones.
+   Students: this file links the device to the logged-in account and tags it with the
+             course, automatically on every page, so a "BSIT only" notice reaches only
+             BSIT phones. The one thing it cannot do for them is say "Allow": browsers
+             require the student to tap that themselves (see the banner in notify.js).
+   Logged out / admin: the device is unlinked, so a shared phone never buzzes with the
+             previous student's notices.
    Admin:    when a NEW announcement is posted, this file asks OneSignal to
              send it. The OneSignal REST key is pasted on the admin dashboard
              and kept in that one browser (never in the GitHub files).
@@ -68,11 +72,20 @@
                     notifyButton: { enable: false }
                 }).then(function () {
                     os = OneSignal;
+                    var sub = OneSignal.User.PushSubscription;
                     if (student) {
-                        OneSignal.login(student.id);                         // so one student = one device list
+                        // Link this phone to the logged-in account, every page load, with no tap needed
+                        OneSignal.login(student.id);                         // one student = one list of devices
                         OneSignal.User.addTag("course", student.course);     // lets the admin target a course
+                        // If this browser already said yes (for example a second account on the same phone),
+                        // switch push back on silently. A first-time student is asked by the banner instead.
+                        if (!sub.optedIn && !!OneSignal.Notifications.permission && wantsPush()) sub.optIn();
+                    } else {
+                        // Logged out (or admin): stop this phone receiving the previous student's notices
+                        if (sub.optedIn) sub.optOut();
+                        OneSignal.logout();
                     }
-                    subscribed = !!OneSignal.User.PushSubscription.optedIn;
+                    subscribed = !!sub.optedIn;
                     OneSignal.User.PushSubscription.addEventListener("change", function (e) {
                         subscribed = !!(e && e.current && e.current.optedIn);
                     });
@@ -83,6 +96,21 @@
             });
         });
         return loading;
+    }
+
+    // Did the student switch system notifications off in Settings on this device?
+    function wantsPush() {
+        try { return JSON.parse(localStorage.getItem("neucast_alert_prefs") || "{}").system !== false; }
+        catch (e) { return true; }
+    }
+
+    // Turn push on or off for this device without asking the browser again
+    function setOptIn(on) {
+        return load().then(function (OneSignal) {
+            if (!OneSignal) return;
+            var sub = OneSignal.User.PushSubscription;
+            return Promise.resolve(on ? sub.optIn() : sub.optOut()).then(function () { subscribed = !!sub.optedIn; });
+        }).catch(function () { /* ignore */ });
     }
 
     // Must be called straight from a tap. Resolves "granted", "denied" or "unsupported".
@@ -191,14 +219,15 @@
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wireAdminCard);
     else wireAdminCard();
 
-    // Students: get the SDK ready early so the "Turn on alerts" tap can ask for permission immediately
-    if (enabled() && student) load();
+    // Get the SDK ready on every page: students are linked, everyone else is unlinked (see load)
+    if (enabled()) load();
 
     window.NeuPush = {
         enabled: enabled,
         needsInstall: needsInstall,
         isIOS: isIOS,
         subscribe: subscribe,
+        setOptIn: setOptIn,
         isSubscribed: function () { return subscribed; },
         send: send
     };

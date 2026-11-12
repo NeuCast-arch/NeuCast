@@ -25,6 +25,18 @@ Apple only allows push for a site added to the Home Screen.
 5. Tap **Send a test alert** to check.
 Android and desktop students skip steps 1 to 3: the "Turn on alerts" banner is enough.
 
+## How accounts get linked (automatic)
+- **Every page load**, a logged-in student's phone is linked to their student ID and tagged with their course.
+  No code or tap is needed, so any new account is linked the first time it opens NeuCast.
+- **The one step that can't be automatic:** the browser itself requires the student to tap **Allow**. NeuCast
+  shows the "Turn on alerts" banner on the homepage to every student who hasn't, and asks again every 3 days if
+  they pick "Not now".
+- If that browser already allowed alerts (for example a second account on the same phone), push switches on
+  silently for the new account.
+- **Logging out unlinks the phone**, so a shared phone doesn't keep buzzing with the last student's notices.
+- Turning "System notifications" off in Settings really stops push on that device.
+- A student who changes course gets the new course tag the next time they open the homepage.
+
 ## What gets sent
 - A **new** announcement is pushed when the admin posts it: to all students, or only to the course it targets.
   Urgent and Health notices are sent as high priority. Edits show as in-app alerts only, so a typo fix does not buzz every phone.
