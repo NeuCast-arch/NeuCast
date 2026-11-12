@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#F5F6F8">
+        <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="NeuCast">
     <title>Admin Dashboard - NeuCast</title>
     <script src="theme.js"></script>
     <script src="animations.js"></script>
@@ -15,6 +20,7 @@
     <link rel="stylesheet" href="skeleton.css">
     <link rel="stylesheet" href="components.css">
     <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="notify.css">
     <link rel="stylesheet" href="animations.css">
 </head>
 
@@ -80,6 +86,19 @@
                 </div>
 
                 <section id="announcementsTab" class="tab-panel" role="tabpanel" aria-labelledby="tab-announcements">
+                    <details class="panel push-setup" id="pushSetup">
+                        <summary class="panel__head"><h2>Phone push <span id="pushState" class="tag"></span></h2></summary>
+                        <div class="panel__body push-setup__body">
+                            <p>Sends new announcements to students' phones even when NeuCast is closed (free OneSignal plan). Paste the <strong>REST API key</strong> from OneSignal. It is kept in this browser only, never in your GitHub files.</p>
+                            <label for="pushKey" class="sr-only">OneSignal REST API key</label>
+                            <input type="password" id="pushKey" class="input" autocomplete="off" placeholder="OneSignal REST API key">
+                            <div class="push-setup__actions">
+                                <button type="button" id="pushSave" class="btn btn--sm">Save key</button>
+                                <button type="button" id="pushTest" class="btn btn--secondary btn--sm">Send test push</button>
+                                <button type="button" id="pushClear" class="btn btn--ghost btn--sm">Remove key</button>
+                            </div>
+                        </div>
+                    </details>
                     <div class="tab-head">
                         <h2>Announcements</h2>
                         <button id="newBtn" type="button" class="btn"><span data-icon="plus"></span> New announcement</button>
@@ -211,6 +230,6 @@
         </div>
     </div>
 
-    <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js admin.js"></script>
+    <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js push.js admin.js"></script>
 </body>
 </html>

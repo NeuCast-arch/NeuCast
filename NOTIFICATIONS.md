@@ -17,6 +17,7 @@ read on another device do not.
 ## Files
 - `notify.js` the engine (loaded on the homepage and the four feature pages)
 - `notify.css` the prompt and the toast Read button
+- `push.js`, `OneSignalSDKWorker.js`, `manifest.webmanifest`, icons: phone push and Home Screen install (see `ONESIGNAL-SETUP.md`)
 - `sw.js` service worker, needed so phones will show a system notification and so a tap opens the announcement
 - Small edits: `cloud.js` (live stream), `ui.js` (toast action button), `index.html` (prompt + Settings > Alerts), `data.js` (one FAQ line)
 
@@ -27,9 +28,8 @@ read on another device do not.
 3. Close NeuCast on the student device, post again, reopen: the catch-up summary appears.
 
 ## Limits to tell your panel honestly
-- **A fully closed browser cannot be notified** without a push server. Free options that add this: OneSignal free web push,
-  or Firebase Cloud Messaging with a small sender (needs a paid Firebase plan for Cloud Functions).
-- **iPhone Safari** has no system notifications in a normal tab; pop-ups inside NeuCast still work.
+- **A fully closed browser** can only be reached by phone push. That is built in but off until you set up OneSignal's free plan: see `ONESIGNAL-SETUP.md`.
+- **iPhone** (Safari or Chrome, same engine) has no system notifications in a normal tab. The site must be added to the Home Screen first (iOS 16.4+); pop-ups inside NeuCast work either way.
 - Needs **https** (GitHub Pages is) or localhost. Opening `index.html` as a file shows pop-ups only.
 - Firebase free plan allows about **100 devices connected live at once**; beyond that the 8-second polling still delivers.
 - Alert preferences are saved per device, not in the cloud.

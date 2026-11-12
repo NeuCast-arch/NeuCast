@@ -52,6 +52,8 @@
     var prefs = loadPrefs();
     function savePrefs() { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); }
 
+    function pushOn() { return !!(window.NeuPush && window.NeuPush.enabled()); }
+
     function systemReady() { return prefs.on && prefs.system && permission() === "granted"; }
 
     // ---------------------------------------------------------------- small helpers
@@ -127,6 +129,9 @@
     function registerWorker() {
         if (swReg) return Promise.resolve(swReg);
         if (!("serviceWorker" in navigator)) return Promise.resolve(null);
+        if (pushOn()) {   // OneSignal's worker owns this folder; borrow it, do not register a second one
+            return navigator.serviceWorker.getRegistration().then(function (reg) { swReg = reg || null; return swReg; }).catch(function () { return null; });
+        }
         return navigator.serviceWorker.register("sw.js")
             .then(function () { return navigator.serviceWorker.ready; })
             .then(function (reg) { swReg = reg; return reg; })
@@ -143,6 +148,13 @@
     }
 
     function enableSystem() {
+        if (pushOn()) {   // real push: works with the app closed
+            return window.NeuPush.subscribe().then(function (perm) {
+                prefs.system = perm === "granted";
+                savePrefs();
+                return perm;
+            });
+        }
         if (!supported()) return Promise.resolve("unsupported");
         return requestPermission().then(function (perm) {
             prefs.system = perm === "granted";
@@ -154,6 +166,7 @@
 
     function systemNotify(item, high) {
         if (!systemReady()) return;
+        if (pushOn() && window.NeuPush.isSubscribed() && item.id !== 0) return;   // the push already shows it
         var cat = CATEGORIES[getKey(item)];
         var options = {
             body: cat.name + " · " + audienceLabel(item) + "\n" + excerpt(item.details, 110),
@@ -278,10 +291,22 @@
 
     // ---------------------------------------------------------------- the "Turn on alerts" prompt (homepage)
     var prompt = document.getElementById("alertPrompt");
+    function setPromptMode(install) {
+        document.getElementById("alertPromptTitle").textContent = install
+            ? "Install NeuCast to get alerts on your iPhone"
+            : "Get alerted when something new is posted";
+        document.getElementById("alertPromptText").textContent = install
+            ? "In Safari, tap Share, then Add to Home Screen. Open NeuCast from your Home Screen, then turn on alerts."
+            : "Urgent notices and announcements for your course reach you even if NeuCast isn't the tab in front.";
+        document.getElementById("alertPromptOn").hidden = install;
+        document.getElementById("alertPromptLater").textContent = install ? "Got it" : "Not now";
+    }
     function showPromptIfNeeded() {
         if (!prompt) return;
-        var ask = supported() && permission() === "default" && !localStorage.getItem(PROMPT_KEY);
-        prompt.hidden = !ask;
+        var dismissed = !!localStorage.getItem(PROMPT_KEY);
+        var install = pushOn() && window.NeuPush.needsInstall();   // iPhone, not on the Home Screen yet
+        setPromptMode(install);
+        prompt.hidden = dismissed || !(install || (supported() && permission() === "default"));
     }
     if (prompt) {
         document.getElementById("alertPromptOn").addEventListener("click", function () {
@@ -321,7 +346,8 @@
         elSystem.disabled = elSystem.disabled || !prefs.on;
 
         var hint = "";
-        if (!supported()) hint = "This browser can't show system notifications. You'll still get alerts inside NeuCast. On iPhone, system notifications are not available in the browser.";
+        if (!supported() && pushOn() && window.NeuPush.needsInstall()) hint = "On iPhone, open this site in Safari, tap Share, then Add to Home Screen. Open NeuCast from your Home Screen and turn this on there.";
+        else if (!supported()) hint = "This browser can't show system notifications. You'll still get alerts inside NeuCast. On iPhone, system notifications are not available in the browser.";
         else if (permission() === "denied") hint = "System notifications are blocked. Click the lock icon next to the address, allow Notifications, then reload.";
         else if (!systemReady()) hint = "Turn on system notifications to be told even when NeuCast isn't the tab in front.";
         else hint = "You'll be told even when another tab or window is in front. Urgent and Health notices stay on screen until you dismiss them.";

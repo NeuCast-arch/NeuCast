@@ -25,3 +25,12 @@
 .setting--alerts .setting--row + .setting--row { padding-top: .75rem; border-top: 1px solid var(--line); }
 .setting--alerts .alerts-hint { margin: 0; color: var(--muted); font-size: .875rem; line-height: 1.45; }
 .setting--alerts .btn { justify-self: start; }
+
+/* Admin: phone push setup card */
+.push-setup { margin-bottom: var(--sp-4); }
+.push-setup > summary { cursor: pointer; list-style: none; border-bottom: 0; }
+.push-setup > summary::-webkit-details-marker { display: none; }
+.push-setup[open] > summary { border-bottom: 1px solid var(--line); }
+.push-setup__body { display: grid; gap: .75rem; }
+.push-setup__body p { margin: 0; color: var(--text-2); }
+.push-setup__actions { display: flex; flex-wrap: wrap; gap: .5rem; }

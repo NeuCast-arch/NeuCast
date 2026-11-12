@@ -8,3 +8,12 @@
 window.NEUCAST_CLOUD = {
     databaseURL: "https://neucast-55d0c-default-rtdb.firebaseio.com/"
 };
+
+// ---------------------------------------------------------------------------
+//  Phone push (works even when the app is closed). Free OneSignal account.
+//  Paste your OneSignal "App ID" between the quotes. Leave empty to keep push off.
+//  Step-by-step: see ONESIGNAL-SETUP.md
+// ---------------------------------------------------------------------------
+window.NEUCAST_PUSH = {
+    oneSignalAppId: ""
+};

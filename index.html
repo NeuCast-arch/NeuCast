@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#F5F6F8">
-  <title>NeuCast</title>
+      <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="NeuCast">
+    <title>NeuCast</title>
   <script src="theme.js"></script>
   <script src="animations.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,7 +73,7 @@
       <section id="alertPrompt" class="alert alert-prompt" aria-labelledby="alertPromptTitle" hidden>
         <div class="alert-prompt__text">
           <strong id="alertPromptTitle">Get alerted when something new is posted</strong>
-          <small>Urgent notices and announcements for your course reach you even if NeuCast isn't the tab in front.</small>
+          <small id="alertPromptText">Urgent notices and announcements for your course reach you even if NeuCast isn't the tab in front.</small>
         </div>
         <div class="alert-prompt__actions">
           <button type="button" id="alertPromptOn" class="btn btn--sm">Turn on alerts</button>
@@ -303,6 +308,6 @@
 
   <noscript><p class="noscript">NeuCast needs JavaScript to show your announcements. Please turn it on and reload.</p></noscript>
 
-  <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js script.js calendar.js calc.js notify.js"></script>
+  <script src="boot.js" data-scripts="icons.js ui.js cloud-config.js cloud.js data.js script.js calendar.js calc.js push.js notify.js"></script>
 </body>
 </html>

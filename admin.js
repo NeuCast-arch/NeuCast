@@ -578,6 +578,16 @@ announcementForm.addEventListener("submit", function (event) {
     closeFormPopup();
     NeuUI.toast(wasEditing ? "Changes saved" : "Announcement posted", "success");
 
+    // New posts also go out as phone push (edits do not, so a typo fix does not buzz every phone)
+    if (!wasEditing && window.NeuPush) {
+        const posted = announcements.find(function (a) { return a.id === savedId; });
+        if (posted) {
+            NeuPush.send(posted).then(function (r) {
+                if (!r.skipped) NeuUI.toast(r.message, r.ok ? "success" : "error", { duration: 7000 });
+            });
+        }
+    }
+
     // The button that opened the pop-up was redrawn, so hand focus to the saved row (or the New button)
     const back = adminList.querySelector('.edit-btn[data-id="' + savedId + '"]') || newBtn;
     back.focus();

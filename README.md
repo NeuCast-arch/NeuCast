@@ -30,6 +30,7 @@ if `cloud-config.js` has a database URL, mirrored to Firebase (see `CLOUD-SETUP.
 | `login.js`, `register.js`, `profile.js`, `admin.js` | Behavior of those pages |
 | `feature-nav.js` | Shared by the four shape-function pages: who is viewing, header user link, phone menu |
 | `notify.js`, `notify.css`, `sw.js` | Alerts: pop-up, tab-title count, system notification, "Turn on alerts" prompt, Settings > Alerts. See `NOTIFICATIONS.md` |
+| `push.js`, `OneSignalSDKWorker.js`, `manifest.webmanifest` | Phone push (OneSignal free plan) and Home Screen install. See `ONESIGNAL-SETUP.md` |
 | `archive.js` | Archive page (Rectangle): filter past/expired/read notices by date and scope |
 | `feedback.js` | Feedback page (Pentagon): star rating, suggestions, bug reports |
 | `careers.js` | Careers & OJT page (Trapezoid): listings, Apply now / Save opportunity |
