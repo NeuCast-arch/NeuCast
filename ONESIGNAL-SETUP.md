@@ -33,9 +33,20 @@ Android and desktop students skip steps 1 to 3: the "Turn on alerts" banner is e
   they pick "Not now".
 - If that browser already allowed alerts (for example a second account on the same phone), push switches on
   silently for the new account.
-- **Logging out unlinks the phone**, so a shared phone doesn't keep buzzing with the last student's notices.
+- **Logging out detaches the phone from the account but keeps it subscribed.** It still gets announcements for all students, and never the last student's course-only ones.
 - Turning "System notifications" off in Settings really stops push on that device.
 - A student who changes course gets the new course tag the next time they open the homepage.
+
+## Without opening the app, or with the phone off
+- After a student has logged in once and tapped **Allow**, nothing else is needed. Pushes arrive with NeuCast closed.
+- A phone that is **switched off or has no internet** cannot be alerted at that moment. Apple's and Google's servers
+  hold the push and deliver it when the phone is back online: up to 7 days for normal notices, 3 days for Urgent and
+  Health ones, so an old typhoon warning doesn't show up a week late.
+- An iPhone that was off may show only the **latest** of several missed pushes. The "While you were away" summary
+  in NeuCast lists everything missed once the student opens it.
+- Phone settings can still delay or block alerts: Focus / Do Not Disturb, Low Power Mode, Android battery saver, or
+  notifications turned off for the browser or Home Screen app in the phone's own Settings.
+- The push is sent from the admin's browser when the admin posts, so the admin needs internet at that moment.
 
 ## What gets sent
 - A **new** announcement is pushed when the admin posts it: to all students, or only to the course it targets.

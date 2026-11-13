@@ -12,8 +12,8 @@
              course, automatically on every page, so a "BSIT only" notice reaches only
              BSIT phones. The one thing it cannot do for them is say "Allow": browsers
              require the student to tap that themselves (see the banner in notify.js).
-   Logged out / admin: the device is unlinked, so a shared phone never buzzes with the
-             previous student's notices.
+   Logged out / admin: the device is detached from the account but stays subscribed, so it
+             keeps receiving announcements for all students (not course-only ones).
    Admin:    when a NEW announcement is posted, this file asks OneSignal to
              send it. The OneSignal REST key is pasted on the admin dashboard
              and kept in that one browser (never in the GitHub files).
@@ -81,8 +81,9 @@
                         // switch push back on silently. A first-time student is asked by the banner instead.
                         if (!sub.optedIn && !!OneSignal.Notifications.permission && wantsPush()) sub.optIn();
                     } else {
-                        // Logged out (or admin): stop this phone receiving the previous student's notices
-                        if (sub.optedIn) sub.optOut();
+                        // Logged out (or admin): detach from the old account but STAY subscribed.
+                        // The phone loses its course tag, so it still gets announcements for all students,
+                        // and never the previous student's course-only ones.
                         OneSignal.logout();
                     }
                     subscribed = !!sub.optedIn;
@@ -155,7 +156,9 @@
             contents: { en: excerpt(item.details, 140) || "Open NeuCast to read it." },
             url: new URL("index.html?notice=" + encodeURIComponent(item.id), window.location.href).href,
             priority: high ? 10 : 5,
-            ttl: 172800
+            // How long the push service holds it for a phone that is off or offline.
+            // Urgent notices go stale quickly (3 days); everything else waits up to 7 days.
+            ttl: high ? 259200 : 604800
         };
         if (aud === "all") body.included_segments = ["Subscribed Users"];
         else body.filters = [{ field: "tag", key: "course", relation: "=", value: aud }];
@@ -219,7 +222,7 @@
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wireAdminCard);
     else wireAdminCard();
 
-    // Get the SDK ready on every page: students are linked, everyone else is unlinked (see load)
+    // Get the SDK ready on every page: students are linked, everyone else is detached (see load)
     if (enabled()) load();
 
     window.NeuPush = {
